@@ -9,15 +9,15 @@ dll = ctypes.CDLL('./points.so')
 dll.diffEqPoints.argtypes = [ctypes.c_int] + [ctypes.c_float]*4
 dll.diffEqPoints.restype = ctypes.POINTER(ctypes.POINTER(ctypes.c_float))
 
-n = 1000 #no of points to plot for given differential equation plot
+n = 200 #no of points to plot for given differential equation plot
 
 x = 0
+y = 0.01
 y1 = 1
-y2 = 2
 h = 0.01
 
 #Labeling the coordinates
-tri_coords = np.block([np.array([[x, y1]]).reshape(-1, 1)])
+tri_coords = np.block([np.array([[x, y]]).reshape(-1, 1)])
 plt.scatter(tri_coords[0,:], tri_coords[1,:])
 vert_labels = ['A']
 for i, txt in enumerate(vert_labels):
@@ -27,7 +27,7 @@ for i, txt in enumerate(vert_labels):
                  xytext=(10,-20), # distance from text to points (x,y)
                  ha='center') # horizontal alignment can be left, right or center
 
-pts = dll.diffEqPoints(n, h, x, y1, y2) 
+pts = dll.diffEqPoints(n, h, x, y, y1) 
 
 #Plotting the circle
 coords = []
