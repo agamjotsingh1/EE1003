@@ -35,12 +35,13 @@
 \usepackage{hhline}                                           
 \usepackage{ifthen}                                           
 \usepackage{lscape}
+
 \begin{document}
 
 \bibliographystyle{IEEEtran}
 \vspace{3cm}
 
-\title{1.3.4}
+\title{9.1.3}
 \author{EE24BTECH11002 - Agamjot Singh}
 % \maketitle
 % \newpage
@@ -53,22 +54,41 @@
 
 \textbf{Question:}
 \newline
-If $\vec{A}\brak{1,3}$, $\vec{B}\brak{-1,2}$, $\vec{C}\brak{2,5}$ and $\vec{D}\brak{x,4}$ are the vertices of a parallelogram $ABCD$, then the value of x is
-\newline
-\textbf{Solution:}
-Let $\vec{D}$ be some $\myvec{x\\y}$.
-By parallelogram law of addition, 
+Solve the differential equation:
 \begin{align}
-  \vec{BA} + \vec{BC} &= \vec{BD}\\
-  \vec{BA} &= \vec{A} - \vec{B} = \myvec{1\\3} - \myvec{-1\\2} = \myvec{2\\1}\\
-  \vec{BC} &= \vec{C} - \vec{B} = \myvec{2\\5} - \myvec{-1\\2} = \myvec{3\\3}\\
-  \vec{BD} &= \vec{D} - \vec{B} = \myvec{x\\y} - \myvec{-1\\2} = \myvec{x+1\\y-2}\\
-  \text{By equation (1), you get}\\
-  \myvec{x+1\\y-2} &= \myvec{2\\1} + \myvec{3\\3} = \myvec{5\\4}\\
-  x &= 4, y = 6
+    \brak{\frac{dy}{dx}}^4 + 3y{\frac{d^2 y}{d x^2}} = 0
 \end{align}
 
-By equation $\brak{7}$, we can see that no such $\vec{D}$ in the form $\myvec{x\\4}$ exists.
+\textbf{Solution:}
+
+Theoritical solution:
+TODO
+\newline
+Computational Solution: Euler's method
+\newline
+By the first principle of derivative,
+\begin{align}
+    y^{\prime}\brak{x} &= \lim_{h\to0} \frac{y\brak{x + h} - y\brak{x}}{h}\\
+    y\brak{x + h} &= y\brak{x} + h\brak{y^{\prime}\brak{x}}, h\to0
+\end{align}
+
+For a $m^{\text{th}}$ order differential equation,
+\newline
+Let $y_1 = y$, $y_2 = y^{\prime}$, $y_3 = y^{\prime\prime} \dots$, $y_m = y^{m - 1}$, then we obtain the system
+\begin{align}
+    \myvec{y_1^{\prime}\\y_2^{\prime}\\\vdots\\y_{m - 1}^{\prime}\\y_m^{\prime}} = \myvec{y_2\\y_3\\\vdots\\y_m\\f\brak{x, y_1, y_2,\dots,y_m}}
+\end{align}
+Here, $f$ is described by the given differential equation. The initial conditions $y_1\brak{x_0} = K_1$, $y_2\brak{x_0} = K_2$, $\dots$, $y_m\brak{x_0} = K_m$.
+
+Using Euler's method \brak{\text{first principle of derivative}},
+\begin{align}
+    \myvec{y_1\brak{x + h}\\y_2\brak{x + h}\\\vdots\\y_m\brak{x + h}} = \myvec{y_1\brak{x} + hy_2\brak{x}\\y_2\brak{x} + hy_3\brak{x}\\\vdots\\y_m\brak{x} + hf\brak{x, y_1, y_2 \dots y_m}}
+\end{align}
+
+The given differential equation can be represented as,
+\begin{align}
+    \brak{y^{\prime}}^4 + 3yy^{\prime\prime} = 0
+\end{align}
 
 \begin{figure}[h!]
    \centering
