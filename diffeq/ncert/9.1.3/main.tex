@@ -61,10 +61,11 @@ Solve the differential equation:
 
 \textbf{Solution:}
 
-Theoritical solution:
-TODO
+\textbf{Theoritical solution:}
 \newline
-Computational Solution: Euler's method
+The given differential equation is a second-order nonlinear ordinary differential equation and cannot be theoritcally solved using known methods.
+\newline
+\textbf{Computational Solution:} Euler's method
 \newline
 By the first principle of derivative,
 \begin{align}
@@ -74,26 +75,52 @@ By the first principle of derivative,
 
 For a $m^{\text{th}}$ order differential equation,
 \newline
-Let $y_1 = y$, $y_2 = y^{\prime}$, $y_3 = y^{\prime\prime} \dots$, $y_m = y^{m - 1}$, then we obtain the system
+
+Let 
+\begin{align}
+    y_1 = y \text{ , } y_2 = y^{\prime} \text{ , } y_3 = y^{\prime\prime} \text{ , } \dots \text{ , } y_m = y^{m - 1}
+\end{align}
+then we obtain the system
+
 \begin{align}
     \myvec{y_1^{\prime}\\y_2^{\prime}\\\vdots\\y_{m - 1}^{\prime}\\y_m^{\prime}} = \myvec{y_2\\y_3\\\vdots\\y_m\\f\brak{x, y_1, y_2,\dots,y_m}}
 \end{align}
 Here, $f$ is described by the given differential equation. The initial conditions $y_1\brak{x_0} = K_1$, $y_2\brak{x_0} = K_2$, $\dots$, $y_m\brak{x_0} = K_m$.
 
-Using Euler's method \brak{\text{first principle of derivative}},
+Representing the system in Euler's form \brak{\text{using first principle of derivative}},
 \begin{align}
-    \myvec{y_1\brak{x + h}\\y_2\brak{x + h}\\\vdots\\y_m\brak{x + h}} = \myvec{y_1\brak{x} + hy_2\brak{x}\\y_2\brak{x} + hy_3\brak{x}\\\vdots\\y_m\brak{x} + hf\brak{x, y_1, y_2 \dots y_m}}
+    \myvec{y_1\brak{x + h}\\y_2\brak{x + h}\\\vdots\\y_m\brak{x + h}} &= \myvec{y_1\brak{x} + hy_2\brak{x}\\y_2\brak{x} + hy_3\brak{x}\\\vdots\\y_m\brak{x} + hf\brak{x, y_1, y_2 \dots y_m}}\\
+    \myvec{y_1\brak{x + h}\\y_2\brak{x + h}\\\vdots\\y_m\brak{x + h}} &= \myvec{y_1\brak{x}\\y_2\brak{x}\\\vdots\\y_m\brak{x}} + h\myvec{y_2\brak{x}\\y_3\brak{x}\\\vdots\\f\brak{x, y_1, y_2, \dots, y_m}} 
+\end{align}
+
+Generalizing the system into an iterative format for plotting $y\brak{x}$,
+\begin{align}
+    \myvec{y_{1, n + 1}\brak{x_n + h}\\y_{2, n + 1}\brak{x_n + h}\\\vdots\\y_{m, n + 1}\brak{x_n + h}} &= \myvec{y_{1, n}\brak{x_n}\\y_{2, n}\brak{x_n}\\\vdots\\y_{m, n} \brak{x_n}} + h\myvec{y_{2, n}\brak{x_n}\\y_{3, n}\brak{x_n}\\\vdots\\f\brak{x_n, y_{1, n}, y_{2, n}, \dots, y_{m, n}}}\\
+    x_{n + 1} &= x_{n} + h
 \end{align}
 
 The given differential equation can be represented as,
 \begin{align}
-    \brak{y^{\prime}}^4 + 3yy^{\prime\prime} = 0
+    \brak{y^{\prime}}^4 + 3yy^{\prime\prime} = 0\\
+    y^{\prime\prime} = -\frac{\brak{y^{\prime}}^4}{3y}
 \end{align}
+We see that $m = 2$, thus,
+\begin{align}
+    y_3 &= y^{\prime\prime} = -\frac{\brak{y^{\prime}}^4}{3y} = -\frac{\brak{{y_2}^4}}{3y_1}\\
+    \myvec{y_1^{\prime}\\y_2^{\prime}} &= \myvec{y_2\\-\frac{\brak{y^{\prime}}^4}{3y}}\\
+    \myvec{y_{1, n + 1}\brak{x_n + h}\\y_{2, n + 1}\brak{x_n + h}} &= \myvec{y_{1, n}\brak{x_n}\\y_{2, n}\brak{x_n}} + h\myvec{y_{2, n}\brak{x_n}\\-\frac{\brak{y_{2, n}}^4}{3y_{1, n}}} 
+\end{align}
+
+Iteratively plotting the above system taking intial conditions as 
+\begin{align}
+    x_0 = 0 \text{ , } y_{1, 0} = 0.01 \text{ , } y_{2, 0} = 1
+\end{align}
+we get the following plot.
 
 \begin{figure}[h!]
    \centering
-   \includegraphics[width=0.7\linewidth]{figs/graph.png}
-   \caption{Quadrilateral ABCD formed with given equations}
+   \includegraphics[width=0.7\columnwidth]{figs/graph.png}
+   \caption{Computational solution for $\brak{y^{\prime}}^4 + 3yy^{\prime\prime} = 0$}
    \label{label}
 \end{figure}
 
