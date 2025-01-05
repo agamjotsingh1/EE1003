@@ -90,15 +90,20 @@ Here, $f$ is described by the given differential equation. The initial condition
 Representing the system in Euler's form \brak{\text{using first principle of derivative}},
 \begin{align}
     \myvec{y_1\brak{x + h}\\y_2\brak{x + h}\\\vdots\\y_m\brak{x + h}} &= \myvec{y_1\brak{x} + hy_2\brak{x}\\y_2\brak{x} + hy_3\brak{x}\\\vdots\\y_m\brak{x} + hf\brak{x, y_1, y_2 \dots y_m}}\\
-    \myvec{y_1\brak{x + h}\\y_2\brak{x + h}\\\vdots\\y_m\brak{x + h}} &= \myvec{y_1\brak{x}\\y_2\brak{x}\\\vdots\\y_m\brak{x}} + h\myvec{y_2\brak{x}\\y_3\brak{x}\\\vdots\\f\brak{x, y_1, y_2, \dots, y_m}} 
+    \myvec{y_1\brak{x+h} \\ \vdots \\ y_{m-1}\brak{x+h} \\ y_m\brak{x+h}} &=\myvec{y_1\brak{x} \\ \vdots \\ y_{m-1}\brak{x} \\ y_m\brak{x}} + h\myvec{y_2\brak{x} \\ \vdots \\ y_m\brak{x} \\f\brak{x, y_1, y_2, \dots, y_m} }\\
+    \vec{y}\brak{x+h} &= \vec{y}\brak{x} + h\myvec{0 & 1 & 0 & 0 & \dots & 0 & 0\\ 0 & 0 & 1 & 0 & \dots & 0 & 0\\0 & 0 & 0 & 1 & \dots & 0 & 0\\\vdots & \vdots & \vdots & \vdots& \ddots & \vdots & \vdots\\ 0 & 0 & 0 & 0 & \dots & 0 & 1\\0 & 0 & 0 & 0 & \dots & 0 &\frac{f\brak{x, y_1, y_2, \dots, y_m}}{y_m}}\vec{y}\brak{x}\\
+    \vec{y}\brak{x+h} &= \myvec{1 & h & 0 & 0 & \dots & 0 & 0\\ 0 & 1 & h & 0 & \dots & 0 & 0\\0 & 0 & 1 & h & \dots & 0 & 0\\\vdots & \vdots & \vdots & \vdots& \ddots & \vdots & \vdots\\ 0 & 0 & 0 & 0 & \dots & 1 & h\\0 & 0 & 0 & 0 & \dots & 0 & 1+\frac{f\brak{x, y_1, y_2, \dots, y_m}}{y_m}}\vec{y}\brak{x}
 \end{align}
 
 Generalizing the system into an iterative format for plotting $y\brak{x}$,
 \begin{align}
-    \myvec{y_{1, n + 1}\brak{x_n + h}\\y_{2, n + 1}\brak{x_n + h}\\\vdots\\y_{m, n + 1}\brak{x_n + h}} &= \myvec{y_{1, n}\brak{x_n}\\y_{2, n}\brak{x_n}\\\vdots\\y_{m, n} \brak{x_n}} + h\myvec{y_{2, n}\brak{x_n}\\y_{3, n}\brak{x_n}\\\vdots\\f\brak{x_n, y_{1, n}, y_{2, n}, \dots, y_{m, n}}}\\
+    \myvec{y_{1, n + 1}\\y_{2, n + 1}\\\vdots\\y_{m, n + 1}} &= \myvec{y_{1, n}\\y_{2, n}\\\vdots\\y_{m, n}} + h\myvec{y_{2, n}\\y_{3, n}\\\vdots\\f\brak{x_n, y_{1, n}, y_{2, n}, \dots, y_{m, n}}}\\
+    \vec{y_{n + 1}} &= \vec{y_{n}} + h\myvec{0 & 1 & 0 & 0 & \dots & 0 & 0\\ 0 & 0 & 1 & 0 & \dots & 0 & 0\\0 & 0 & 0 & 1 & \dots & 0 & 0\\\vdots & \vdots & \vdots & \vdots & \ddots & \vdots & \vdots\\ 0 & 0 & 0 & 0 & \dots & 0 & 1\\0 & 0 & 0 & 0 & \dots & 0 & \frac{f\brak{x_n, y_{1, n}, y_{2, n}, \dots, y_{m, n}}}{y_{m, n}}}\vec{y_n} \text{, where } \vec{y_n} = \myvec{y_{1, n}\brak{x_n}\\y_{2, n}\brak{x_n}\\\vdots\\y_{m, n}\brak{x_n}}\\
+    \vec{y_{n + 1}} &= \myvec{1 & h & 0 & 0 & \dots & 0 & 0\\ 0 & 1 & h & 0 & \dots & 0 & 0\\0 & 0 & 1 & h & \dots & 0 & 0\\\vdots & \vdots & \vdots & \vdots& \ddots & \vdots & \vdots\\ 0 & 0 & 0 & 0 & \dots & 1 & h\\0 & 0 & 0 & 0 & \dots & 0 & 1+\frac{f\brak{x_n, y_{1, n}, y_{2, n}, \dots, y_{m, n}}}{y_{m, n}}}\vec{y_n}\\
     x_{n + 1} &= x_{n} + h
 \end{align}
-
+Here, the vector $\vec{y_n}$ is not to be confused with $y_k$ which is the $\brak{k - 1}^{\text{th}}$ derivative of $y\brak{x}$.
+\newline
 The given differential equation can be represented as,
 \begin{align}
     \brak{y^{\prime}}^4 + 3yy^{\prime\prime} = 0\\
@@ -108,7 +113,8 @@ We see that $m = 2$, thus,
 \begin{align}
     y_3 &= y^{\prime\prime} = -\frac{\brak{y^{\prime}}^4}{3y} = -\frac{\brak{{y_2}^4}}{3y_1}\\
     \myvec{y_1^{\prime}\\y_2^{\prime}} &= \myvec{y_2\\-\frac{\brak{y^{\prime}}^4}{3y}}\\
-    \myvec{y_{1, n + 1}\brak{x_n + h}\\y_{2, n + 1}\brak{x_n + h}} &= \myvec{y_{1, n}\brak{x_n}\\y_{2, n}\brak{x_n}} + h\myvec{y_{2, n}\brak{x_n}\\-\frac{\brak{y_{2, n}}^4}{3y_{1, n}}} 
+    \myvec{y_{1, n + 1}\\y_{2, n + 1}} &= \myvec{y_{1, n}\\y_{2, n}} + h\myvec{y_{2, n}\\-\frac{\brak{y_{2, n}}^4}{3y_{1, n}}}\\
+    \vec{y_{n + 1}} = \myvec{1 & h\\0 & 1 -\frac{\brak{y_{2, n}}^3}{3y_{1, n}}} \vec{y_n}
 \end{align}
 
 Iteratively plotting the above system taking intial conditions as 
