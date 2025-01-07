@@ -1,0 +1,124 @@
+\let\negmedspace\undefined
+\let\negthickspace\undefined
+\documentclass[journal]{IEEEtran}
+\usepackage[a5paper, margin=10mm, onecolumn]{geometry}
+\usepackage{lmodern} % Ensure lmodern is loaded for pdflatex
+\usepackage{tfrupee} % Include tfrupee package
+
+\setlength{\headheight}{1cm} % Set the height of the header box
+\setlength{\headsep}{0mm}     % Set the distance between the header box and the top of the text
+
+\usepackage{gvv-book}
+\usepackage{gvv}
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts,amsthm}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{txfonts}
+\usepackage{listings}
+\usepackage{enumitem}
+\usepackage{mathtools}
+\usepackage{gensymb}
+\usepackage{comment}
+\usepackage[breaklinks=true]{hyperref}
+\usepackage{tkz-euclide} 
+\usepackage{listings}
+\def\inputGnumericTable{}                                 
+\usepackage[latin1]{inputenc}                                
+\usepackage{color}                                            
+\usepackage{array}                                            
+\usepackage{longtable}                                       
+\usepackage{calc}                                             
+\usepackage{multirow}                                         
+\usepackage{hhline}                                           
+\usepackage{ifthen}                                           
+\usepackage{lscape}
+
+\begin{document}
+
+\bibliographystyle{IEEEtran}
+\vspace{3cm}
+
+\title{8.1.6}
+\author{EE24BTECH11002 - Agamjot Singh}
+% \maketitle
+% \newpage
+% \bigskip
+{\let\newpage\relax\maketitle}
+
+\renewcommand{\thefigure}{\theenumi}
+\renewcommand{\thetable}{\theenumi}
+\setlength{\intextsep}{10pt} % Space between text and floats
+
+\textbf{Question:}
+\newline
+Find the area of the region in the first quadrant enclosed by $x$-axis, line $x = \sqrt{3}y$ and the circle $x^2 + y^2 = 4$.
+
+\textbf{Theoritical solution:}
+The curves, which are given by $y = \frac{x}{\sqrt{3}}$ and $y = \sqrt{4 - x^2}$, intersect at $\brak{\sqrt{3}, 1}$ in the first quadrant. The curve $y = \sqrt{4 - x^2}$ touches the $x$-axis at $\brak{2, 0}$.
+\newline
+For finding the area enclosed $A$, we split the area into $2$ parts $A_1$ and $A_2$ such that
+\begin{align}
+    A &= A_1 + A_2\\
+    A_1 &= \int_{0}^{\sqrt{3}} \frac{x}{\sqrt{3}} \, dx\\
+        &= \sbrak{\frac{x^2}{2\sqrt{3}}}_{0}^{\sqrt{3}}\\
+        &= \frac{\sqrt{3}}{2} \approx 0.86602\\
+    A_2 &= \int_{\sqrt{3}}^{1} \sqrt{4 - x^2} \, dx\\
+        &= \sbrak{\frac{x\sqrt{4 - x^2}}{2} + 2\sin^{-1}{\frac{x}{2}}}_{\sqrt{3}}^{2}\\
+        &= \frac{\pi}{3} - \frac{\sqrt{3}}{2} \approx 0.18117\\
+    \implies A &= A_1 + A_2 \approx 1.04719
+\end{align}
+
+\textbf{Computational Solution:} Trapezoidal rule
+\newline
+For finding the approximate area enclosed using numerical methods, we use the Trapezoidal method. We split the area into multiple small trapeziums \brak{\text{like small strips}}, and we sum up all the trapezium areas to find the total area. 
+\newline
+We discretize the range of $x$-coordinates with uniform step-size $h \to 0$, such that the discretized points are $x_0$, $x_1$, $\dots$, $x_n$ and $x_{n + 1} = x_n + h$.
+\newline
+Let the sum of trapizoidal areas till $x_n$ be $A_n$ and $y = y\brak{x}$, then we write the $\textbf{difference equation}$,
+\begin{align}
+    A_n &= \frac{h}{2}\brak{y\brak{x_0} + y\brak{x_1}} + \frac{h}{2}\brak{y\brak{x_1} + y\brak{x_2}} + \dots + \frac{h}{2}\brak{y\brak{x_{n - 1}} + y\brak{x_{n}}}\\
+    A_n &= h\brak{\frac{y\brak{x_0}}{2} + y\brak{x_1} + y\brak{x_2} \dots \frac{y\brak{x_n}}{2}}\\
+    A_{n + 1} &= A_n + \frac{h}{2}\brak{y\brak{x_{n + 1}} + y\brak{x_n}} \text{, } x_{n + 1} = x_n + h\\
+    A_{n + 1} &= A_n + \frac{h}{2}\brak{y\brak{x_n + h} + y\brak{x_n}}\\
+\end{align}
+By the first principle of derivative,
+\begin{align}
+    y^{\prime}\brak{x} &= \lim_{h\to0} \frac{y\brak{x + h} - y\brak{x}}{h}\\
+    y\brak{x + h} &= y\brak{x} + h\brak{y^{\prime}\brak{x}} \text{, } h\to0
+\end{align}
+Rewriting the difference equation, we get,
+\begin{align}
+    A_{n + 1} &= A_n + \frac{h}{2}\brak{y\brak{x_n} + hy^{\prime}\brak{x_n} + y\brak{x_n}}\\
+    A_{n + 1} &= A_n + h\brak{y\brak{x_n} + \frac{h}{2}y^{\prime}\brak{x_n}}\\
+    A_{n + 1} &= A_n + hy\brak{x_n} + \frac{h^2}{2}y^{\prime}\brak{x_n}
+\end{align}
+Representing $y\brak{x_n}$ as $y_n$, the difference equation becomes,
+\begin{align}
+    A_{n + 1} &= A_n + hy_n + \frac{h^2}{2}y_n^{\prime}
+\end{align}
+
+For the given area enclosed, we take
+\begin{align}
+    y\brak{x} =
+    \begin{cases}
+        \frac{x}{\sqrt{3}} & \quad 0 < x < \sqrt{3}\\
+        \sqrt{4 - x^2} & \quad \sqrt{3} < x < 1
+    \end{cases}
+\end{align}
+Computational Area: 1.047367
+\newline
+Theoritical Area: 1.04719
+\newline
+Plotting the given equations, we get the following plot.
+
+\begin{figure}[h!]
+   \centering
+   \includegraphics[width=0.7\columnwidth]{figs/graph.png}
+    \caption{Shaded area with the circle and line}
+   \label{label}
+\end{figure}
+
+\end{document}
