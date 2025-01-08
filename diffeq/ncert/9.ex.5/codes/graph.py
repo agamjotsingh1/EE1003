@@ -13,24 +13,13 @@ dll.diffEqPoints.restype = ctypes.POINTER(ctypes.POINTER(ctypes.c_float))
 dll.freeMultiMem.argtypes = [ctypes.POINTER(ctypes.POINTER(ctypes.c_float)), ctypes.c_int]
 dll.freeMultiMem.restype = None
 
-n = 200 # no of points to plot for given differential equation plot
+n = 1000 # no of points to plot for given differential equation plot
 h = 0.01 # step size
 
 # initial conditions, y1 = y, y2 = y'
 x = 0
-y1 = 0.01
+y1 = 0
 y2 = 1
-
-# labeling the coordinates
-tri_coords = np.block([np.array([[x, y1]]).reshape(-1, 1)])
-plt.scatter(tri_coords[0,:], tri_coords[1,:])
-vert_labels = ['A']
-for i, txt in enumerate(vert_labels):
-    plt.annotate(f'{txt}\n({tri_coords[0,i]:.0f}, {tri_coords[1,i]:.0f})',
-                 (tri_coords[0,i], tri_coords[1,i]), # this is the point to label
-                 textcoords="offset points", # how to position the text
-                 xytext=(10,-20), # distance from text to points (x,y)
-                 ha='center') # horizontal alignment can be left, right or center
 
 # getting an array of all the points in the plot
 pts = dll.diffEqPoints(n, h, x, y1, y2) 
@@ -43,6 +32,11 @@ for pt in pts[:n]:
 
 coords_plot = np.block(coords)
 plt.scatter(coords_plot[0,:], coords_plot[1,:], marker=".", label = "Sim", color="royalblue")
+
+# theoretical plot
+x_linspace = np.linspace(0, int(n*h), n)
+y_linspace = np.sin(x_linspace)
+plt.plot(x_linspace, y_linspace, c = 'r', label = "Theory")
 
 # freeing the memory of the array 'pts'
 dll.freeMultiMem(pts, n)

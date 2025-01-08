@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2025.1.3)  8 JAN 2025 21:47
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2025.1.3)  9 JAN 2025 00:43
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1969,48 +1969,40 @@ File: ts1txr.fd 2000/12/15 v3.1
 f-dist/fonts/enc/dvips/base/8r.enc}
 
 ]
-Underfull \hbox (badness 10000) in paragraph at lines 101--103
-
- []
-
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [2]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [3]
-<figs/graph.png, id=74, 462.528pt x 346.896pt>
+<figs/graph.png, id=57, 462.528pt x 346.896pt>
 File: figs/graph.png Graphic file (type png)
 <use figs/graph.png>
-Package pdftex.def Info: figs/graph.png  used on input line 153.
+Package pdftex.def Info: figs/graph.png  used on input line 128.
 (pdftex.def)             Requested size: 254.9356pt x 191.20625pt.
 
-Underfull \vbox (badness 5460) has occurred while \output is active []
 
- [4]
-[5 <./figs/graph.png>] (./main.aux)
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+[2] [3 <./figs/graph.png>] (./main.aux)
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
 Package rerunfilecheck Info: File `main.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
  ) 
 Here is how much of TeX's memory you used:
- 52702 strings out of 477950
- 1247116 string characters out of 5838505
- 1984253 words of memory out of 6000000
+ 52692 strings out of 477950
+ 1247015 string characters out of 5838505
+ 1968251 words of memory out of 6000000
  72012 multiletter control sequences out of 15000+600000
- 581543 words of font info for 171 fonts, out of 8000000 for 9000
+ 580193 words of font info for 169 fonts, out of 8000000 for 9000
  37 hyphenation exceptions out of 8191
- 109i,17n,107p,1194b,912s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 109i,12n,107p,1194b,891s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/txfonts/rtxmi.pfb></usr/sha
 re/texlive/texmf-dist/fonts/type1/public/txfonts/rtxr.pfb></usr/share/texlive/t
 exmf-dist/fonts/type1/public/txfonts/txex.pfb></usr/share/texlive/texmf-dist/fo
 nts/type1/public/txfonts/txsy.pfb></usr/share/texlive/texmf-dist/fonts/type1/ur
 w/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.
 pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on main.pdf (5 pages, 73262 bytes).
+Output written on main.pdf (3 pages, 70322 bytes).
 PDF statistics:
- 139 PDF objects out of 1000 (max. 8388607)
- 99 compressed objects within 1 object stream
- 41 named destinations out of 1000 (max. 500000)
+ 122 PDF objects out of 1000 (max. 8388607)
+ 84 compressed objects within 1 object stream
+ 33 named destinations out of 1000 (max. 500000)
  114 words of extra memory for PDF output out of 10000 (max. 10000000)
 

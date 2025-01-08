@@ -10,8 +10,8 @@ float **diffEqPoints(int n, float h, float x, float y1, float y2){
   for (int i = 0; i < n; i++){
     pts[i] = (float *) malloc(sizeof(float) * 2);
 
-    float y2_new = y2 + h*(-pow(y2, 4)/(3*y1));
-    y1 = y1 + h*y2;
+    float y2_new = (y2*(4 + h*h) - 4*h*y1)/(4 + h*h);
+    y1 = (y1*(4 + h*h) + 4*h*y2)/(4 + h*h);
     y2 = y2_new;
     x = x + h;
 
