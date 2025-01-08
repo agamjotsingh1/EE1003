@@ -57,7 +57,28 @@
 Find the area of the region in the first quadrant enclosed by $x$-axis, line $x = \sqrt{3}y$ and the circle $x^2 + y^2 = 4$.
 
 \textbf{Theoritical solution:}
-The curves, which are given by $y = \frac{x}{\sqrt{3}}$ and $y = \sqrt{4 - x^2}$, intersect at $\brak{\sqrt{3}, 1}$ in the first quadrant. The curve $y = \sqrt{4 - x^2}$ touches the $x$-axis at $\brak{2, 0}$.
+\newline
+Let the equation of the line be repsented as
+\begin{align}
+    \vec{x} = \vec{h} + \kappa \vec{m} \text{, where } \vec{h} = \myvec{0\\0} \text{ and } \vec{m} = \myvec{\frac{\sqrt{3}}{2} \\ \frac{1}{2}}
+\end{align}
+Let the equation of the circle be 
+\begin{align}
+    \vec{x}^{\top} V \vec{x} + 2\vec{u}^{\top}\vec{x} + f = 0 \text{, where } V = \myvec{1 & 0\\0 & 1} \text{, } \vec{u} = \myvec{0\\0} \text{ and } f = - 4
+\end{align}
+
+Point of intersection of the line with the circle is given by $x_i = h + \kappa_im$, where $\kappa_i$ is calculated as,
+
+\begin{align}
+    k_i=\frac{1}{\vec{m}^\top V \vec{m}}\brak{-\vec{m}^\top \brak{Vh+\vec{u}}\pm \sqrt{\sbrak{\vec{m}^\top \brak{Vh+\vec{u}}}^2-g\brak{h}\brak{\vec{m}^\top V \vec{m}}}}
+\end{align}
+
+Substituting the values, we get,
+\begin{align}
+    k_i &= \pm 2\\
+    x_i &= \pm \myvec{\sqrt{3}\\1}
+\end{align}
+As we are only considering the first quadrant, we take the point of intersection as $\myvec{\sqrt{3}\\1}$.
 \newline
 For finding the area enclosed $A$, we split the area into $2$ parts $A_1$ and $A_2$ such that
 \begin{align}
@@ -95,10 +116,6 @@ Rewriting the difference equation, we get,
     A_{n + 1} &= A_n + h\brak{y\brak{x_n} + \frac{h}{2}y^{\prime}\brak{x_n}}\\
     A_{n + 1} &= A_n + hy\brak{x_n} + \frac{h^2}{2}y^{\prime}\brak{x_n}
 \end{align}
-Representing $y\brak{x_n}$ as $y_n$, the difference equation becomes,
-\begin{align}
-    A_{n + 1} &= A_n + hy_n + \frac{h^2}{2}y_n^{\prime}
-\end{align}
 
 For the given area enclosed, we take
 \begin{align}
@@ -108,6 +125,17 @@ For the given area enclosed, we take
         \sqrt{4 - x^2} & \quad \sqrt{3} < x < 1
     \end{cases}
 \end{align}
+
+Substituting $y\brak{x}$, the equation becomes,
+\begin{align}
+    A_{n + 1} &=
+    \begin{cases}
+        A_n + h\frac{x_n}{\sqrt{3}} + \frac{h^2}{2\sqrt{3}} & \quad 0 < x_n < \sqrt{3}\\
+        A_n + h\sqrt{4 - x_n^2} + \frac{h^2}{2}\brak{\frac{-x_n}{4 - x_n^2}} & \quad \sqrt{3} < x_n < 1
+    \end{cases}\\
+    x_{n + 1} &= x_n + 1
+\end{align}
+
 Computational Area: 1.047367
 \newline
 Theoritical Area: 1.04719
