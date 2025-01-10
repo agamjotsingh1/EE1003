@@ -81,7 +81,7 @@ Applying Laplace transform on the given differential equation, we get,
     y^{\prime\prime} + y &= 0\\
     \mathcal{L}\brak{y^{\prime\prime}} + \mathcal{L}\brak{y} &= 0\\
     s^2\mathcal{L}\brak{y} - sc_1 - c_2 + \mathcal{L}\brak{y} &= 0\\
-    \mathcal{L}\brak{y} &= \frac{sc_1 + c_2}{s^2 + 1} = c_1\frac{s}{s^2 + 1} + c_2\frac{1}{s^2 + 1}\\
+    \mathcal{L}\brak{y} &= \frac{sc_1 + c_2}{s^2 + 1} = c_1\frac{s}{s^2 + 1} + c_2\frac{1}{s^2 + 1} \label{laplace_eq}\\
 \end{align}
 Taking laplace inverse on both sides, we get,
 \begin{align}
@@ -121,7 +121,44 @@ Iteratively plotting the above system taking intial conditions as
 \begin{align}
     x_0 = 0 \text{ , } y_{1, 0} = 0 \text{ , } y_{2, 0} = 1
 \end{align}
-we get the following plot.
+we get the plot of the given differential equation.
+
+\textbf{Alternative Computational Solution:} Bilinear transform 
+\newline
+We have to apply laplace transformation on the given differential equation. From \brak{\ref{laplace_eq}}, we get,
+\begin{align}
+    Y\brak{s} &= \frac{sc_1 + c_2}{s^2 + 1}
+\end{align}
+\begin{align}
+    Y\brak{s} &= \frac{sc_1 + c_2}{s^2 + 1}
+\end{align}
+Applying Bilinear transform, with $T = h$, we get,
+\begin{align}
+    s &= \frac{2}{T}\frac{1 - z^{-1}}{1 + z^{-1}} = \frac{2}{h}\frac{1 - z^{-1}}{1 + z^{-1}}\\
+    \implies Y\brak{z} &= \frac{2hc_1 \brak{z^2 - 1} + c_2h^2 \brak{z + 1}^2}{\brak{h^2 + 4}z^2 + 2\brak{h^2 - 4}z + \brak{h^2 + 4}}\\
+    \implies \brak{z^2 + 2\frac{h^2 - 4}{h^2 + 4}z + 1} Y\brak{z} &= 2hc_1 \brak{z^2 - 1} + c_2h^2 \brak{z^2 + 2z + 1}\\
+    \implies z^2Y\brak{z} + 2\frac{h^2 - 4}{h^2 + 4}zY\brak{z} + Y\brak{z} &= \brak{2h c_1 + c_2 h^2}z^2 + \brak{2h^2 c_2}z + \brak{h^2c_2 - 2hc_1} \label{bilinear_eq}
+\end{align}
+Some properties of one sided $z$ transform,
+\begin{align}
+    \mathcal{Z}\brak{y\sbrak{n + 2}} &= z^2 Y\brak{z} - y\sbrak{1}z - y\sbrak{0}\\
+    \mathcal{Z}\brak{y\sbrak{n + 1}} &= z Y\brak{z} - z y_\sbrak{0}\\
+    \mathcal{Z}\brak{\delta\sbrak{n}} &= 1 \text{, } z \neq 0\\
+    \mathcal{Z}\brak{y\sbrak{n}} = Y\brak{z} &\implies \mathcal{Z}\brak{y\sbrak{n - n_0}} = z^{-n_0}Y\brak{z} \label{time_shift_eq}
+\end{align}
+By the time shift property $\brak{\ref{time_shift_eq}}$,
+\begin{align}
+    \mathcal{Z}\brak{\delta\sbrak{n + 2}} &= z^2 \text{, } z \neq 0\\
+    \mathcal{Z}\brak{\delta\sbrak{n + 1}} &= z \text{, } z \neq 0
+\end{align}
+Rewriting equation $\brak{\ref{bilinear_eq}}$, we get,
+\begin{align}
+    \implies z^2Y\brak{z} + 2\frac{h^2 - 4}{h^2 + 4}zY\brak{z} + Y\brak{z} &= \brak{2h c_1 + c_2 h^2}z^2 + \brak{2h^2 c_2}z + \brak{h^2c_2 - 2hc_1}
+\end{align}
+Taking $z$ inverse transform on both sides of equation $\brak{\ref{bilinear_eq}}$,
+\begin{align}
+    hello
+\end{align}
 
 \begin{figure}[h!]
     \centering
