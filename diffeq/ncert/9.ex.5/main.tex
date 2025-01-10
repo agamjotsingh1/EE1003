@@ -158,16 +158,49 @@ Rewriting equation $\brak{\ref{bilinear_eq}}$, we get,
     &\text{where } z \neq 0
 \end{align}
 Region of convergence $\brak{\textbf{ROC}}$ is given by $z \neq 0$.
-Taking $z$ inverse transform on both sides of equation $\brak{\ref{z_trans_eq}}$,
+\newline
+Taking $z$ inverse transform on both sides of equation $\brak{\ref{z_trans_eq}}$, we get the $\textbf{difference equation}$ which is given by,
 \begin{align}
     y&\sbrak{n + 2} + 2\brak{\frac{h^2 - 4}{h^2 + 4}} y\sbrak{n + 1} + y\sbrak{n} \nonumber\\
-    &= \frac{\brak{2h c_1 + c_2 h^2}\delta\sbrak{n + 2} + \brak{2h^2 c_2 - y\sbrak{1} - 2\brak{\frac{h^2 - 4}{h^2 + 4}}y\sbrak{0}}\delta\sbrak{n + 1} + \brak{h^2c_2 - 2hc_1 - y\sbrak{0}}\delta\sbrak{n}}{h^2 + 4}
+    &= \frac{\brak{2h c_1 + c_2 h^2}\delta\sbrak{n + 2} + \brak{2h^2 c_2 - y\sbrak{1} - 2\brak{\frac{h^2 - 4}{h^2 + 4}}y\sbrak{0}}\delta\sbrak{n + 1} + \brak{h^2c_2 - 2hc_1 - y\sbrak{0}}\delta\sbrak{n}}{h^2 + 4} \label{diff_eq}
 \end{align}
+Here, $\delta$ is given by,
+\begin{align}
+    \delta\sbrak{n - n_0} =
+    \begin{cases}
+        1 & \quad n = n_0\\
+        0 & \quad n \neq n_0
+    \end{cases}
+\end{align}
+As $n > 0$, 
+\begin{align}
+    \delta\sbrak{n + 2} = \delta\sbrak{n + 1} = 0
+\end{align}
+The equation \brak{\ref{diff_eq}} is now given by,
+\begin{align}
+    y\sbrak{n + 2} + 2\brak{\frac{h^2 - 4}{h^2 + 4}} y\sbrak{n + 1} + y\sbrak{n} = \frac{\brak{h^2c_2 - 2hc_1 - y\sbrak{0}}\delta\sbrak{n}}{h^2 + 4} 
+\end{align}
+At this point we drop the notation $y\sbrak{n}$ and replace it with $y_n$, and we replace $c_1 = y\brak{0}$ and $c_2 = y^{\prime}\brak{0}$,
+\begin{align}
+    y_{n + 2} + 2\brak{\frac{h^2 - 4}{h^2 + 4}} y_{n + 1} + y_{n} = \frac{\brak{h^2y^{\prime}\brak{0} - 2hy\brak{0} - y_0}\delta\sbrak{n}}{h^2 + 4} 
+\end{align}
+Note that for computationally plotting the above difference equation, we need $y_0 = y\brak{0}$ as well as $y_1$. To find $y_1 = y\brak{0 + h} = y\brak{h}$ we employ first principle of derivative,
+\begin{align}
+    y^{\prime}\brak{x} &= \lim_{h\to0} \frac{y\brak{x + h} - y\brak{x}}{h}\\
+    y\brak{x + h} &= y\brak{x} + hy^{\prime}\brak{x}, h\to0\\
+    y_1 &= y\brak{h} = y\brak{0} + hy^{\prime}\brak{0}
+\end{align}
+
+Iteratively plotting the above system taking intial conditions as 
+\begin{align}
+    x_0 = 0 \text{ , } y_{0} = y\brak{0} = 0 \text{ , } y^{\prime}\brak{0} = 1
+\end{align}
+we get the plot of the given differential equation.
 
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.7\columnwidth]{figs/graph.png}
-    \caption{Computational solution for $y^{\prime\prime} + y = 0$}
+    \caption{Here Sim-$1$ plot represents the plot given by Trapezoid Method, and Sim-$2$ which is given by Bilinear transform using the same value of $h$. This plot clearly shows the accuracy of the Bilinear transform method.}
     \label{label}
 \end{figure}
 
