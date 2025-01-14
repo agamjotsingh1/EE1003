@@ -51,6 +51,7 @@ plt.plot(coords_plot[0,:], coords_plot[1,:], label = "Objective Function", color
 grad_n = 1000
 x_min = dll.gradientDescentPoint(grad_n, h, x, tol)
 print("x_min = ", x_min)
+print("f_min = ", x_min**3 + (16 - x_min)**3)
 plt.scatter(x_min, x_min**3 + (16 - x_min)**3, label= "Minimum Point", color="black", marker="o")
 
 # freeing the memory of the array 'pts'
