@@ -58,7 +58,7 @@ A cottage industry produces a certain number of pottery articles in a day. It wa
 \newline
 \textbf{Solution:}
 \newline
-Let the number of articles produced in a day be $x \geq 0$, then the above question can the following quadratic equation will be formed.
+Let the number of articles produced in a day be $x$, then the above question can the following quadratic equation will be formed.
 \begin{align}
     \brak{3 + 2x}x &= 90\\
     2x^2 + 3x - 90 &= 0
@@ -67,8 +67,6 @@ Theoretically, it can easily be solved using the quadratic formula,
 \begin{align}
     x = \frac{-3 \pm \sqrt{729}}{4} = 6, -\frac{30}{4}
 \end{align}
-As we take $x\geq0$, $x = 6$ is the solution.
-\newline
 Now we use the \textbf{Newton-Raphson method} to computationally find the roots.
 \newline
 Let 
@@ -88,6 +86,19 @@ Substituting $f\brak{x}$ and $f^{\prime}\brak{x}$ in the difference equation, we
     x_{n + 1} &= \frac{2\brak{x_n}^2 + 90}{4x_n + 3} \text{, } x_n \neq -\frac{3}{4}
 \end{align}
 Taking initial guess $\brak{x_0} = 8$, we get the root as $x = 6.000000476837158$.
+Taking initial guess $\brak{x_0} = -8$, we get the root as $x = $.
+\newline
+\textbf{Matrix Method:}
+Frobenius \textbf{companion matrix} for a polynomial $p$ of the form,
+\begin{align}
+    p\brak{x} = c_0 + c_1x + c_2x^2 + \dots + c_{n - 1}x^{n - 1} + x_n
+\end{align}
+is given by
+\begin{align}
+    C\brak{p} = \myvec{0 & 0 & \dots & 0 & -c_0\\1 & 0 & \dots & 0 & -c_1\\0 & 1 & \dots & 0 & -c_2\\\vdots & \vdots & \ddots & \vdots & \vdots\\0 & 0 & \dots & 1 & -c_{n - 1}}
+\end{align}
+The eigen values of this matrix are the roots of the polynomial $p$.
+
 \begin{figure}[h!]
    \centering
    \includegraphics[width=0.7\columnwidth]{figs/graph.png}

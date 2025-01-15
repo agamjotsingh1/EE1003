@@ -37,8 +37,14 @@ plt.plot(coords_plot[0,:], coords_plot[1,:], label = "Quadratic Equation", color
 # Getting the root of the quadratic equation
 maxIters = 1000
 root = dll.quadRoot(maxIters, tol, x0)
-print("x = ", root)
-plt.scatter([root], [2*root*root + 3*root - 90], marker = "o", color = "black", label = "Root")
+print("x_1 = ", root)
+plt.scatter([root], [2*root*root + 3*root - 90], marker = "o", color = "black", label = "Root 1")
+
+# Getting the other root of the quadratic equation
+x0 = -10
+root2 = dll.quadRoot(maxIters, 1e-3, -8)
+print("x_2 = ", root2)
+plt.scatter([root2], [2*root2*root2 + 3*root2 - 90], marker = "o", color = "royalblue", label = "Root 2")
 
 # freeing the memory of the array 'pts'
 dll.freeMultiMem(pts, n)
