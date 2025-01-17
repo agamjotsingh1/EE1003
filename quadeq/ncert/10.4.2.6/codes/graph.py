@@ -7,7 +7,7 @@ import math
 dll = ctypes.CDLL('./points.so')
 
 # describing the argument and return types of the function 'quadPlot', 'quadRoot' and 'freeMultiMem' in the dll
-dll.quadRoot.argtypes = [ctypes.c_int] + [ctypes.c_float]
+dll.quadRoot.argtypes = [ctypes.c_int] + [ctypes.c_float]*2
 dll.quadRoot.restype = (ctypes.c_float)
 
 dll.quadPlot.argtypes = [ctypes.c_int] + [ctypes.c_float]*2
@@ -41,8 +41,8 @@ print("x_1 = ", root)
 plt.scatter([root], [2*root*root + 3*root - 90], marker = "o", color = "black", label = "Root 1")
 
 # Getting the other root of the quadratic equation
-x0 = -10
-root2 = dll.quadRoot(maxIters, 1e-3, -8)
+x0 = -8
+root2 = dll.quadRoot(maxIters, tol, x0)
 print("x_2 = ", root2)
 plt.scatter([root2], [2*root2*root2 + 3*root2 - 90], marker = "o", color = "royalblue", label = "Root 2")
 
