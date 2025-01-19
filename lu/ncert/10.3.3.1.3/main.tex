@@ -89,6 +89,17 @@ $l$ is the multiplier used to zero out $a_{21}$ in $A$.
 \begin{align}
     L = \myvec{1 & 0\\3 & 1}
 \end{align}
+This $LU$ decomposition could also be computationally found using Doolittle's algorithm. The update equation is given by,
+\begin{align}
+    U_{ij} &= \begin{cases}
+        A_{ij} & \quad i = 0\\
+        A_{ij} - \sum_{k = 0}^{i - 1} L_{ik} U_{kj} & \quad i > 0
+    \end{cases}\\
+    L_{ij} &= \begin{cases}
+        \frac{A_{ij}}{U_{jj}} & \quad j = 0, U_{jj} \neq 0\\
+        \frac{A_{ij} - \sum_{k = 0}^{j - 1} L_{ik} U_{kj}}{U_{jj}} & \quad j > 0
+    \end{cases}\\
+\end{align}
 We see that there is a zero on the diagonal of the upper triangular matrix $U$ which implies that $A$ is singular and hence the system has either zero or infinitely many solutions.
 \newline
 Let $\vec{y} = U\vec{x}$,
@@ -116,5 +127,4 @@ This shows that the equation has infinitely many solutions.
   \caption{Plotting the two lines, which come out as parallel}
   \label{label}
 \end{figure}
-
 \end{document}
