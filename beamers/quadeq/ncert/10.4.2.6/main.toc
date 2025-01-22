@@ -1,0 +1,6 @@
+\beamer@sectionintoc {2}{Problem}{4}{0}{1}
+\beamer@sectionintoc {3}{Solution}{6}{0}{2}
+\beamer@subsectionintoc {3}{1}{Theoretical Solution}{7}{0}{2}
+\beamer@subsectionintoc {3}{2}{Computation Solution - Newton Raphson's Method}{8}{0}{2}
+\beamer@subsectionintoc {3}{3}{Computation Solution - Eigenvalue Method}{10}{0}{2}
+\beamer@subsectionintoc {3}{4}{Plot}{21}{0}{2}
