@@ -349,6 +349,10 @@ Using this $QR$ algorithm, we get the following update equation,
 \end{frame}
 
 \begin{frame}
+    The $QR$ algorithm will sometimes converge to matrix which is of the form where some subdiagonal elements will not converge to 0, and there will be $2\times2$ blocks protruding the diagonal of the matrix. 
+    These can be solved be taking all such blocks, and then taking the eigenvalues of all these sub $2\times 2$ matrix blocks.
+    \newline
+    \newline
     Running the eigenvalue code for our companion matrix we get,
     \begin{align}
         6 + 0.0i, -7.5 + 0.0i

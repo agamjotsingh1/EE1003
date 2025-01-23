@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2025.1.10)  23 JAN 2025 13:41
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2025.1.10)  23 JAN 2025 14:08
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1271,13 +1271,13 @@ Overfull \vbox (29.30655pt too high) detected at line 77
 
 ]
 LaTeX Font Info:    Font shape `OT1/cmss/b/n' in size <10.95> not available
-(Font)              Font shape `OT1/cmss/bx/n' tried instead on input line 200.
+(Font)              Font shape `OT1/cmss/bx/n' tried instead on input line 198.
 
 LaTeX Font Info:    Font shape `OT1/cmss/b/n' in size <8> not available
-(Font)              Font shape `OT1/cmss/bx/n' tried instead on input line 200.
+(Font)              Font shape `OT1/cmss/bx/n' tried instead on input line 198.
 
 LaTeX Font Info:    Font shape `OT1/cmss/b/n' in size <6> not available
-(Font)              Font shape `OT1/cmss/bx/n' tried instead on input line 200.
+(Font)              Font shape `OT1/cmss/bx/n' tried instead on input line 198.
 
  [13
 
@@ -1290,12 +1290,12 @@ LaTeX Font Info:    Font shape `OT1/cmss/b/n' in size <6> not available
 ] [17
 
 ]
-Overfull \hbox (11.65129pt too wide) detected at line 328
+Overfull \hbox (11.65129pt too wide) detected at line 326
  []$[] [] [] [] []$ 
  []
 
 
-Overfull \vbox (13.68202pt too high) detected at line 328
+Overfull \vbox (13.68202pt too high) detected at line 326
  []
 
 [18
@@ -1308,7 +1308,7 @@ Overfull \vbox (13.68202pt too high) detected at line 328
 <figs/graph.png, id=167, 462.528pt x 346.896pt>
 File: figs/graph.png Graphic file (type png)
 <use figs/graph.png>
-Package pdftex.def Info: figs/graph.png  used on input line 369.
+Package pdftex.def Info: figs/graph.png  used on input line 371.
 (pdftex.def)             Requested size: 215.10196pt x 161.32614pt.
  [21
 
@@ -1345,7 +1345,7 @@ e1/public/amsfonts/cm/cmssi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/pu
 blic/amsfonts/cm/cmssi8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/a
 msfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfont
 s/cm/cmsy8.pfb>
-Output written on main.pdf (21 pages, 153436 bytes).
+Output written on main.pdf (21 pages, 153713 bytes).
 PDF statistics:
  235 PDF objects out of 1000 (max. 8388607)
  180 compressed objects within 2 object streams
