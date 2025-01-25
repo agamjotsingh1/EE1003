@@ -136,6 +136,15 @@ Let $A$ be an event defined as,
               &= \frac{7}{8} = 0.875
 \end{align}
 
+\textbf{Simulation}
+Running a simulation requires generating random numbers with uniform probability. This is done using OpenSSL's random byte generator.
+\begin{enumerate}
+    \item $1$ byte of randomly generated uniform data is generated using OpenSSL rand.h.
+    \item This random number is scaled down from $\cbrak{0, 1, 2, \dots 255}$ to $\sbrak{0, 1}$ by dividing by 255.
+    \item For generating the bernoulli random variable, if this normalized number is less than $p$ then 0 is returned, else 1 is returned.
+\end{enumerate}
+As number of trials increase, the relative frequency converges to the actual probability of the event.
+
 \begin{figure}[h!]
   \centering
   \includegraphics[width=0.7\columnwidth]{figs/cdf.png}

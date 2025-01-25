@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2025.1.10)  25 JAN 2025 19:54
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2025.1.10)  25 JAN 2025 21:24
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1984,42 +1984,36 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
  [1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}{/usr/share/texlive/texmf
 -dist/fonts/enc/dvips/base/8r.enc}
 
-]
-<figs/cdf.png, id=52, 462.528pt x 346.896pt>
+] [2]
+<figs/cdf.png, id=71, 462.528pt x 346.896pt>
 File: figs/cdf.png Graphic file (type png)
 <use figs/cdf.png>
-Package pdftex.def Info: figs/cdf.png  used on input line 141.
+Package pdftex.def Info: figs/cdf.png  used on input line 150.
 (pdftex.def)             Requested size: 254.9356pt x 191.20625pt.
-
-
-LaTeX Warning: `!h' float specifier changed to `!ht'.
-
-<figs/pmf1.png, id=54, 462.528pt x 346.896pt>
+<figs/pmf1.png, id=73, 462.528pt x 346.896pt>
 File: figs/pmf1.png Graphic file (type png)
 <use figs/pmf1.png>
-Package pdftex.def Info: figs/pmf1.png  used on input line 148.
+Package pdftex.def Info: figs/pmf1.png  used on input line 157.
 (pdftex.def)             Requested size: 254.9356pt x 191.20625pt.
-
-LaTeX Warning: `!h' float specifier changed to `!ht'.
-
-<figs/pmf2.png, id=55, 462.528pt x 346.896pt>
+<figs/pmf2.png, id=74, 462.528pt x 346.896pt>
 File: figs/pmf2.png Graphic file (type png)
 <use figs/pmf2.png>
-Package pdftex.def Info: figs/pmf2.png  used on input line 155.
+Package pdftex.def Info: figs/pmf2.png  used on input line 164.
 (pdftex.def)             Requested size: 254.9356pt x 191.20625pt.
+
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-<figs/sim.png, id=56, 462.528pt x 346.896pt>
+<figs/sim.png, id=75, 462.528pt x 346.896pt>
 File: figs/sim.png Graphic file (type png)
 <use figs/sim.png>
-Package pdftex.def Info: figs/sim.png  used on input line 162.
+Package pdftex.def Info: figs/sim.png  used on input line 171.
 (pdftex.def)             Requested size: 254.9356pt x 191.20625pt.
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-[2] [3 <./figs/cdf.png> <./figs/pmf1.png>] [4 <./figs/pmf2.png> <./figs/sim.png
->] (./main.aux)
+[3 <./figs/cdf.png> <./figs/pmf1.png>] [4 <./figs/pmf2.png> <./figs/sim.png>]
+(./main.aux)
 
 LaTeX Warning: There were multiply-defined labels.
 
@@ -2027,13 +2021,13 @@ Package rerunfilecheck Info: File `main.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
  ) 
 Here is how much of TeX's memory you used:
- 52763 strings out of 477950
- 1249072 string characters out of 5838504
+ 52768 strings out of 477950
+ 1249136 string characters out of 5838504
  1964253 words of memory out of 6000000
- 72080 multiletter control sequences out of 15000+600000
+ 72082 multiletter control sequences out of 15000+600000
  580193 words of font info for 169 fonts, out of 8000000 for 9000
  37 hyphenation exceptions out of 8191
- 109i,17n,107p,1194b,891s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 109i,17n,107p,1194b,1012s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb
 ></usr/share/texlive/texmf-dist/fonts/type1/public/txfonts/rtxmi.pfb></usr/shar
 e/texlive/texmf-dist/fonts/type1/public/txfonts/rtxr.pfb></usr/share/texlive/te
@@ -2041,10 +2035,10 @@ xmf-dist/fonts/type1/public/txfonts/txex.pfb></usr/share/texlive/texmf-dist/fon
 ts/type1/public/txfonts/txsy.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw
 /times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.p
 fb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on main.pdf (4 pages, 107525 bytes).
+Output written on main.pdf (4 pages, 109316 bytes).
 PDF statistics:
- 132 PDF objects out of 1000 (max. 8388607)
- 85 compressed objects within 1 object stream
- 30 named destinations out of 1000 (max. 500000)
+ 136 PDF objects out of 1000 (max. 8388607)
+ 89 compressed objects within 1 object stream
+ 33 named destinations out of 1000 (max. 500000)
  129 words of extra memory for PDF output out of 10000 (max. 10000000)
 
