@@ -96,7 +96,7 @@ Extending this system to $m$ tosses, we get,
 
 Let probablity mass function function for the bernoulli random variable $X_{i}$ be given by,
 \begin{align}
-    P_{X_{i}}\brak{n} = \begin{cases}
+    p_{X_{i}}\brak{n} = \begin{cases}
         p & \quad n = 0\\
         1 - p & \quad n = 1\\
         0 & \quad n = \mathbb{Z} - \cbrak{0, 1}
@@ -104,20 +104,20 @@ Let probablity mass function function for the bernoulli random variable $X_{i}$ 
 \end{align}
 where $p$ is the probablity of getting heads.
 \begin{align}
-    M_{X_1}\brak{z} &= \sum_{k = -\infty}^{\infty} P_{X_{1}}\brak{n} z^{-k} = p + \brak{1 - p} z^{-1}\\
-    M_{X_2}\brak{z} &= \sum_{k = -\infty}^{\infty} P_{X_{2}}\brak{n} z^{-k} = p + \brak{1 - p} z^{-1}\\
+    M_{X_1}\brak{z} &= \sum_{k = -\infty}^{\infty} p_{X_{1}}\brak{n} z^{-k} = p + \brak{1 - p} z^{-1}\\
+    M_{X_2}\brak{z} &= \sum_{k = -\infty}^{\infty} p_{X_{2}}\brak{n} z^{-k} = p + \brak{1 - p} z^{-1}\\
                     &\vdots\\
-    M_{X_m}\brak{z} &= \sum_{k = -\infty}^{\infty} P_{X_{m}}\brak{n} z^{-k} = p + \brak{1 - p} z^{-1}\\
+    M_{X_m}\brak{z} &= \sum_{k = -\infty}^{\infty} p_{X_{m}}\brak{n} z^{-k} = p + \brak{1 - p} z^{-1}\\
     \implies M_{X}\brak{z} &= \brak{p + \brak{1 - p} z^{-1}}^{m}\\
     M_{X}\brak{z} &= \sum_{k = -\infty}^{\infty} \brak{\comb{m}{k} p^{m - k} \brak{1 - p}^{k}} z^{-k}\\
 \end{align}
 Taking $z$-inverse on both sides, we get,
 \begin{align}
-    P_{X}\brak{n} = \comb{m}{n} p^{m - n} \brak{1 - p}^{n}
+    p_{X}\brak{n} = \comb{m}{n} p^{m - n} \brak{1 - p}^{n}
 \end{align}
 Taking $m = 3$ and $p = \frac{1}{2}$,
 \begin{align}
-    P_{X}\brak{n} = \comb{3}{n} \brak{\frac{1}{2}}^{3}
+    p_{X}\brak{n} = \comb{3}{n} \brak{\frac{1}{2}}^{3}
 \end{align}
 Using this probability mass function, the cummulative distribution function C.D.F $\brak{F_{X}\brak{n}}$ is given by,
 \begin{align}
@@ -132,8 +132,8 @@ Using this probability mass function, the cummulative distribution function C.D.
 Let $A$ be an event defined as,
 \begin{align}
     A&\colon\text{Getting atmost two tails}\\
-    P\brak{A} &= P_{X}\brak{0} + P_{X}\brak{1} + P_{X}\brak{2}\\
-              &= \frac{7}{8} = 0.875
+    \pr{A} &= P\brak{X<=2} = F_{X}\brak{2}\\
+    \pr{A} &= \frac{7}{8} = 0.875
 \end{align}
 
 \textbf{Simulation}
@@ -163,13 +163,6 @@ As number of trials increase, the relative frequency converges to the actual pro
   \centering
   \includegraphics[width=0.7\columnwidth]{figs/pmf2.png}
   \caption{PMF plot for $m$ = 15 with the gaussian distrbution plot}
-  \label{label}
-\end{figure}
-
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=0.7\columnwidth]{figs/sim.png}
-  \caption{Relative frequency plot}
   \label{label}
 \end{figure}
 \end{document}
