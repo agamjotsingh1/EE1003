@@ -28,7 +28,7 @@ float *binomCdfPlot(int n, int iters, float p){
     for(int i = 0; i < n + 1; i++) pts[i] = 0;
 
     for(int i = 0; i < iters; i++){
-        // creating 'm' random tosses with bernoulli random variable and adding their sum
+        // creating 'n' random tosses with bernoulli random variable and adding their sum
         // sum is the number of tails in this trial
         int sum = 0;
         for(int j = 0; j < n; j++) sum += rand_bernoulli(p);
@@ -49,7 +49,7 @@ float *binomPmfPlot(int n, int iters, float p){
     for(int i = 0; i < n + 1; i++) pts[i] = 0;
 
     for(int i = 0; i < iters; i++){
-        // creating 'm' random tosses with bernoulli random variable and adding their sum
+        // creating 'n' random tosses with bernoulli random variable and adding their sum
         int sum = 0;
         for(int j = 0; j < n; j++) sum += rand_bernoulli(p);
 
@@ -62,7 +62,7 @@ float *binomPmfPlot(int n, int iters, float p){
 }
 
 // free a 1 dimentional array 'arr'
-void freeSingleMem(float **arr){
+void freeSingleMem(float *arr){
     free(arr);
 }
 

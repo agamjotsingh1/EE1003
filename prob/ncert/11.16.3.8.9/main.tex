@@ -121,7 +121,8 @@ Taking $m = 3$ and $p = \frac{1}{2}$,
 \end{align}
 Using this probability mass function, the cummulative distribution function C.D.F $\brak{F_{X}\brak{n}}$ is given by,
 \begin{align}
-    F_{X}\brak{n} = \begin{cases}
+    F_{X}\brak{n} &= \sum_{k = -\infty}^{n}  \comb{3}{k} \brak{\frac{1}{2}}^{3}\\
+    F_{X}\brak{n} &= \begin{cases}
         0 & \quad n < 0\\
         \comb{3}{0}\brak{\frac{1}{2}}^3 = \frac{1}{8} & \quad 0 \leq n < 1\\
         \comb{3}{0}\brak{\frac{1}{2}}^3 + \comb{3}{1}\brak{\frac{1}{2}}^3 = \frac{1}{2} & \quad 1 \leq n < 2\\
@@ -132,7 +133,7 @@ Using this probability mass function, the cummulative distribution function C.D.
 Let $A$ be an event defined as,
 \begin{align}
     A&\colon\text{Getting atmost two tails}\\
-    \pr{A} &= P\brak{X<=2} = F_{X}\brak{2}\\
+    \pr{A} &= \pr{X<=2} = F_{X}\brak{2}\\
     \pr{A} &= \frac{7}{8} = 0.875
 \end{align}
 
