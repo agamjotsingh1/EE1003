@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2025.1.10)  29 JAN 2025 19:02
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2025.1.10)  29 JAN 2025 23:49
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1051,9 +1051,6 @@ File: l3backend-pdftex.def 2023-01-16 L3 backend support: PDF output (pdfTeX)
 
 LaTeX Warning: Label `label' multiply defined.
 
-
-LaTeX Warning: Label `label' multiply defined.
-
 )
 \openout1 = `main.aux'.
 
@@ -1275,7 +1272,7 @@ Overfull \hbox (21.6801pt too wide) detected at line 202
 ] [13
 
 ]
-<figs/cdf.png, id=132, 462.528pt x 346.896pt>
+<figs/cdf.png, id=130, 462.528pt x 346.896pt>
 File: figs/cdf.png Graphic file (type png)
 <use figs/cdf.png>
 Package pdftex.def Info: figs/cdf.png  used on input line 227.
@@ -1283,10 +1280,10 @@ Package pdftex.def Info: figs/cdf.png  used on input line 227.
  [14
 
  <./figs/cdf.png>]
-<figs/pmf1.png, id=141, 462.528pt x 346.896pt>
-File: figs/pmf1.png Graphic file (type png)
-<use figs/pmf1.png>
-Package pdftex.def Info: figs/pmf1.png  used on input line 237.
+<figs/pmf.png, id=138, 462.528pt x 346.896pt>
+File: figs/pmf.png Graphic file (type png)
+<use figs/pmf.png>
+Package pdftex.def Info: figs/pmf.png  used on input line 237.
 (pdftex.def)             Requested size: 215.10196pt x 161.32614pt.
 
 pdfTeX warning (ext4): destination with the same identifier (name{label}) has b
@@ -1296,21 +1293,35 @@ een already used, duplicate ignored
 l.237 \end{frame}
                   [15
 
- <./figs/pmf1.png>]
-<figs/pmf2.png, id=147, 462.528pt x 346.896pt>
-File: figs/pmf2.png Graphic file (type png)
-<use figs/pmf2.png>
-Package pdftex.def Info: figs/pmf2.png  used on input line 247.
-(pdftex.def)             Requested size: 215.10196pt x 161.32614pt.
+ <./figs/pmf.png>]
+<./figs/gauss_0.png, id=145, 462.528pt x 346.896pt>
+File: ./figs/gauss_0.png Graphic file (type png)
+<use ./figs/gauss_0.png>
+Package pdftex.def Info: ./figs/gauss_0.png  used on input line 252.
+(pdftex.def)             Requested size: 122.91406pt x 92.18106pt.
+<./figs/gauss_1.png, id=146, 462.528pt x 346.896pt>
+File: ./figs/gauss_1.png Graphic file (type png)
+<use ./figs/gauss_1.png>
+Package pdftex.def Info: ./figs/gauss_1.png  used on input line 252.
+(pdftex.def)             Requested size: 122.91406pt x 92.18106pt.
+<./figs/gauss_2.png, id=147, 462.528pt x 346.896pt>
+File: ./figs/gauss_2.png Graphic file (type png)
+<use ./figs/gauss_2.png>
+Package pdftex.def Info: ./figs/gauss_2.png  used on input line 252.
+(pdftex.def)             Requested size: 122.91406pt x 92.18106pt.
+<./figs/gauss_3.png, id=148, 462.528pt x 346.896pt>
+File: ./figs/gauss_3.png Graphic file (type png)
+<use ./figs/gauss_3.png>
+Package pdftex.def Info: ./figs/gauss_3.png  used on input line 252.
+(pdftex.def)             Requested size: 122.91406pt x 92.18106pt.
 
-pdfTeX warning (ext4): destination with the same identifier (name{label}) has b
-een already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.247 \end{frame}
-                  [16
+Overfull \vbox (2.7569pt too high) detected at line 252
+ []
 
- <./figs/pmf2.png>]
+[16
+
+ <./figs/gauss_0.png> <./figs/gauss_1.png> <./figs/gauss_2.png> <./figs/gauss_3
+.png>]
 \tf@nav=\write6
 \openout6 = `main.nav'.
 
@@ -1324,46 +1335,32 @@ l.247 \end{frame}
 
 LaTeX Warning: There were multiply-defined labels.
 
-
-Package rerunfilecheck Warning: File `main.out' has changed.
-(rerunfilecheck)                Rerun to get outlines right
-(rerunfilecheck)                or use package `bookmark'.
-
-Package rerunfilecheck Info: Checksums for `main.out':
-(rerunfilecheck)             Before: 0737D7143A95055A033D12359A153063;974
-(rerunfilecheck)             After:  2CA89A0D1365038AB3B636C3A7CB866D;974.
+Package rerunfilecheck Info: File `main.out' has not changed.
+(rerunfilecheck)             Checksum: 2CA89A0D1365038AB3B636C3A7CB866D;974.
  ) 
 Here is how much of TeX's memory you used:
- 30093 strings out of 477950
- 599285 string characters out of 5838504
+ 30111 strings out of 477950
+ 599722 string characters out of 5838504
  1867388 words of memory out of 6000000
- 49662 multiletter control sequences out of 15000+600000
+ 49678 multiletter control sequences out of 15000+600000
  525964 words of font info for 81 fonts, out of 8000000 for 9000
  34 hyphenation exceptions out of 8191
  128i,19n,131p,1871b,754s stack positions out of 10000i,1000n,20000p,200000b,200000s
-
-pdfTeX warning (dest): name{Outline0.3.4.15} has been referenced but does not e
-xist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{Outline0.3.3.14} has been referenced but does not e
-xist, replaced by a fixed one
-
-</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/
-share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/
-texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss10.pfb></usr/share/texliv
-e/texmf-dist/fonts/type1/public/amsfonts/cm/cmss12.pfb></usr/share/texlive/texm
-f-dist/fonts/type1/public/amsfonts/cm/cmss8.pfb></usr/share/texlive/texmf-dist/
-fonts/type1/public/amsfonts/cm/cmssbx10.pfb></usr/share/texlive/texmf-dist/font
-s/type1/public/amsfonts/cm/cmssi10.pfb></usr/share/texlive/texmf-dist/fonts/typ
-e1/public/amsfonts/cm/cmssi8.pfb></usr/share/texlive/texmf-dist/fonts/type1/pub
-lic/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/am
-sfonts/cm/cmsy8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/
-symbols/msbm10.pfb>
-Output written on main.pdf (16 pages, 159453 bytes).
+</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></us
+r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/shar
+e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss10.pfb></usr/share/texl
+ive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss12.pfb></usr/share/texlive/te
+xmf-dist/fonts/type1/public/amsfonts/cm/cmss8.pfb></usr/share/texlive/texmf-dis
+t/fonts/type1/public/amsfonts/cm/cmssbx10.pfb></usr/share/texlive/texmf-dist/fo
+nts/type1/public/amsfonts/cm/cmssi10.pfb></usr/share/texlive/texmf-dist/fonts/t
+ype1/public/amsfonts/cm/cmssi8.pfb></usr/share/texlive/texmf-dist/fonts/type1/p
+ublic/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/
+amsfonts/cm/cmsy8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfont
+s/symbols/msbm10.pfb>
+Output written on main.pdf (16 pages, 213225 bytes).
 PDF statistics:
- 215 PDF objects out of 1000 (max. 8388607)
- 161 compressed objects within 2 object streams
- 43 named destinations out of 1000 (max. 500000)
- 114 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 218 PDF objects out of 1000 (max. 8388607)
+ 158 compressed objects within 2 object streams
+ 41 named destinations out of 1000 (max. 500000)
+ 129 words of extra memory for PDF output out of 10000 (max. 10000000)
 
