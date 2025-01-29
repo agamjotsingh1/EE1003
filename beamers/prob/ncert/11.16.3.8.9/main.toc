@@ -1,0 +1,6 @@
+\beamer@sectionintoc {2}{Problem}{4}{0}{1}
+\beamer@sectionintoc {3}{Solution}{6}{0}{2}
+\beamer@subsectionintoc {3}{1}{Defining the sample event space, and random variables}{7}{0}{2}
+\beamer@subsectionintoc {3}{2}{Z-transform to calculate PMF}{9}{0}{2}
+\beamer@subsectionintoc {3}{3}{Simulation}{13}{0}{2}
+\beamer@subsectionintoc {3}{4}{Plot}{14}{0}{2}
