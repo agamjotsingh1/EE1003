@@ -9,21 +9,6 @@ void sevenseg(int a,int b,int c,int d,int e,int f,int g){
   digitalWrite(8, g); 
 }
 
-// converts decimal number to 4-bit binary representation
-int *bin_4bit(int n){
-  int *bin = malloc(sizeof(int) * 4);
-  for(int i = 0; i < 4; i++) bin[i] = 0;
-  int index = 0;
-
-  while(n > 0){
-    bin[index] = n%2;
-    n /= 2;
-    index++;
-  }
-
-  return bin;
-}
-
 // the setup function runs once when you press reset or power the board
 void setup(){
   Serial.begin(9600);
@@ -34,8 +19,43 @@ void setup(){
 void loop(){
   Serial.println(0);
 
-  for(int i = 0; i <= 9; i ++){
-    int* bin = bin_4bit(i);
-    delay(600);
-  }
+  // 0
+  sevenseg(0,0,0,0,0,0,1);
+  delay(500);
+
+  // 1
+  sevenseg(1,0,0,1,1,1,1);
+  delay(500);
+
+  //2
+  sevenseg(0,0,1,0,0,1,0);
+  delay(500);
+
+  //3
+  sevenseg(0,0,0,0,1,1,0);
+  delay(500);
+
+  //4
+  sevenseg(1,0,0,1,1,0,0);
+  delay(500);
+
+  //5
+  sevenseg(0,1,0,0,1,0,0);
+  delay(500);
+
+  //6
+  sevenseg(0,1,0,0,0,0,0);
+  delay(500);
+
+  //7
+  sevenseg(0,0,0,1,1,1,1); 
+  delay(500);
+
+  //8
+  sevenseg(0,0,0,0,0,0,0); 
+  delay(500);
+
+  //9
+  sevenseg(0,0,0,0,1,0,0);
+  delay(500);
 }
