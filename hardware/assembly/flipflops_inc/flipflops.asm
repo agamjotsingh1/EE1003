@@ -3,131 +3,116 @@
 ldi r16, 0xFF ; identifying all pins as ouput in register D
 out DDRD, r16 ; declaring pins as output in register D
 
-ldi r16, 0b00100000 ; identifying all pins as input in register B
-out DDRB, r16 ; declaring pins as input in register B
+ldi r16, 0b00100000 ; identifying all pins (except 13 which is clock) as input in register B
+out DDRB, r16       ; declaring pins as input and output in register B
 
-;sbi DDRB, 5 ;set pin 13 as output pin (DDRB pin 5)
-ldi r16, 0b00000101 ;the last 3 bits define the prescaler, 101 => division by 1024
-out TCCR0B, r16 ;prescalar used = 1024. So new freq. of clock cycle = (16 MHz / 1024) = 16 kHz
+ldi r16, 0b00000101 ; the last 3 bits define the prescaler, 101 => division by 1024
+out TCCR0B, r16     ; prescalar used = 1024. So new freq. of clock cycle = (16 MHz / 1024) = 16 kHz
 
 clr r28 ;output bits. we are only interested in bit 6 from the right.
 
-.def W = r17
-.def X = r18
-.def Y = r15
-.def Z = r20
+.def W = r15
+.def X = r16
+.def Y = r17
+.def Z = r18
 
-.def A = r21
-.def B = r22
-.def C = r23
-.def D = r24
+.def A = r19
+.def B = r20
+.def C = r21
+.def D = r22
 
 .def ONE = r30
-.def TEMP = r16
-.def TEMP2 = r25
-.def TEMP3 = r26
-.def TEMP4 = r27
+.def TMP = r23
+.def TMP2 = r24
 
 ldi ONE, 0b00000001
-clr TEMP
-clr TEMP2
-clr TEMP3
-clr TEMP4
 
 loop:
-  in TEMP, PINB
+  in TMP, PINB
 
-  mov W, TEMP
+  mov W, TMP
   and W, ONE
 
-  lsr TEMP
-  mov X, TEMP
+  lsr TMP
+  mov X, TMP
   and X, ONE
 
-  lsr TEMP
-  mov Z, TEMP
+  lsr TMP
+  mov Z, TMP
   and Z, ONE
 
-  lsr TEMP
-  mov Y, TEMP
+  lsr TMP
+  mov Y, TMP
   and Y, ONE
   
 ; A
-  mov TEMP, W
-  eor TEMP, ONE
-  mov A, TEMP
+  mov TMP, W
+  eor TMP, ONE
+  mov A, TMP
 
 ; B
   ; !W & X & !Z
-  mov TEMP, W
-  eor TEMP, ONE
-  and TEMP, X
-  mov TEMP2, Z
-  eor TEMP2, ONE
-  and TEMP, TEMP2
+  mov TMP, Z
+  eor TMP, ONE
+  and TMP, X
+  and TMP, A ; A = !W
+  mov B, TMP
 
   ; W & !X & !Z
-  mov TEMP2, X
-  eor TEMP2, ONE
-  and TEMP2, W
-  mov TEMP3, Z
-  eor TEMP3, ONE
-  and TEMP2, TEMP3
+  mov TMP, X
+  eor TMP, ONE
+  and TMP, W
+  mov TMP2, Z
+  eor TMP2, ONE
+  and TMP, TMP2
 
-  or TEMP, TEMP2
-  mov B, TEMP
+  or B, TMP
 
 ; C
   ; !W & Y & !Z
-  mov TEMP, W
-  eor TEMP, ONE
-  and TEMP, Y
-  mov TEMP2, Z
-  eor TEMP2, ONE
-  and TEMP, TEMP2
+  mov TMP, Z
+  eor TMP, ONE
+  and TMP, Y
+  and TMP, A ; A = !W
+  mov C, TMP
 
   ; !X & Y & !Z
-  mov TEMP2, X
-  eor TEMP2, ONE
-  and TEMP2, Y
-  mov TEMP3, Z
-  eor TEMP3, ONE
-  and TEMP2, TEMP3
+  mov TMP, X
+  eor TMP, ONE
+  and TMP, Y
+  mov TMP2, Z
+  eor TMP2, ONE
+  and TMP, TMP2
+  or C, TMP
 
   ; W & X & !Y & !Z
-  mov TEMP3, Y
-  eor TEMP3, ONE
-  and TEMP3, W
-  and TEMP3, X
-  mov TEMP4, Z
-  eor TEMP4, ONE
-  and TEMP3, TEMP4
-
-  or TEMP, TEMP2
-  or TEMP, TEMP3
-  mov C, TEMP
+  mov TMP, Y
+  eor TMP, ONE
+  and TMP, W
+  and TMP, X
+  mov TMP2, Z
+  eor TMP2, ONE
+  and TMP, TMP2
+  or C, TMP
 
 ; D
   ; W & X & Y & !Z
-  mov TEMP, Z
-  eor TEMP, ONE
-  and TEMP, X
-  and TEMP, Y
-  and TEMP, W
+  mov TMP, Z
+  eor TMP, ONE
+  and TMP, X
+  and TMP, Y
+  and TMP, W
+  mov D, TMP
 
   ; !W & !X & !Y & Z
-  mov TEMP2, W
-  eor TEMP2, ONE
-  and TEMP2, Z
-  mov TEMP3, X
-  eor TEMP3, ONE
-  and TEMP2, TEMP3
-  mov TEMP3, Y
-  eor TEMP3, ONE
-  and TEMP2, TEMP3
-
-  or TEMP, TEMP2
-  mov D, TEMP
+  mov TMP, X
+  eor TMP, ONE
+  and TMP, A ; A = !W
+  and TMP, Z
+  mov TMP2, Y
+  eor TMP2, ONE
+  and TMP, TMP2
+  or D, TMP
 
   lsl B
 
@@ -138,20 +123,20 @@ loop:
   lsl D
   lsl D
 
-  mov TEMP, A
-  add TEMP, B
-  add TEMP, C
-  add TEMP, D
-  lsl TEMP
-  lsl TEMP
+  mov TMP, A
+  add TMP, B
+  add TMP, C
+  add TMP, D
+  lsl TMP
+  lsl TMP
 
-	out PORTD, TEMP
+	out PORTD, TMP
 
-  ldi TEMP, 0b00100000	;initializing
-	eor r28, TEMP ;change the output of LED
+  ldi TMP, 0b00100000	;initializing
+	eor r28, TMP ;change the output of LED
 	out PORTB, r28 
 
-	ldi r19, 0b01000000 ;times to run the loop = 64 for 1 second delay
+	ldi r29, 0b01000000 ;times to run the loop = 64 for 1 second delay
 	rcall PAUSE 		;call the PAUSE label
 	rjmp loop
 	
@@ -162,7 +147,7 @@ lp2:	;loop runs 64 times
 		AND r16, r17 ;need second bit
 		BREQ PAUSE 
 		OUT TIFR0, r17	;set tifr flag high
-	dec r19
+	dec r29
 	brne lp2
 	ret
 
