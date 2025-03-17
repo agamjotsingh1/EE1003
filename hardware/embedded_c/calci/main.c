@@ -1,6 +1,9 @@
 #include <avr/io.h> 
 #include <util/delay.h> 
-#include <stdlib.h> 
+#include "parser.h"
+#include <stdlib.h>
+#include "string.h"
+#include <stdio.h>
 
 // ------------------
 // TYPEDEFS
@@ -75,6 +78,13 @@ void lcd_msg(const char *text){
         lcd_char(*text++); // send char & update char pointer
 }
 
+void lcd_double(double data){
+    char* st; // save enough space for result
+    snprintf(st, 7, "%lf", data);
+    while(*st) lcd_char(*st++);
+    //lcd_msg(st); // display in on LCD
+}
+
 void lcd_int(int data){
     char st[8] = ""; // save enough space for result
     itoa(data,st,10); // convert integer to ascii 
@@ -102,20 +112,8 @@ int which_button(int n, int button_states[n], int *time_passed){
 }
 
 void switch_off_idle_buttons(int n, int button_states[n], int time_passed){
-    if(time_passed <= 1) return;
+    if(time_passed <= 5) return;
     clear_button_states(n, button_states, -1);
-}
-
-float eval(char str[64]){
-    char buf[64];
-    int op;
-    while(*str){
-        if(*str == '+'){
-            op = 0;
-        }
-        *str += 1;
-    }
-
 }
 
 int main(void){
@@ -125,18 +123,24 @@ int main(void){
     PORTD = 0xFF;
 
     lcd_init(); // initialize LCD controller
-    int n = 2;
-    int button_states[2] = {0};
+    int n = 3;
+    int button_states[3] = {0};
     int time_passed = 0;
     char str[64] = {'\0'};
     int pos = 0;
 
     while(1){
-        lcd_clear();
-
         int button = which_button(n, button_states, &time_passed);
 
-        for(int i = 0; i < n; i++){
+        if(button_states[2] == 1){
+            lcd_clear();
+            //lcd_double(eval_exp(str, 0));
+            lcd_double(1.01);
+            _delay_ms(300);
+            continue;
+        }
+
+        for(int i = 0; i < n - 1; i++){
             if(button_states[i] == 1 && time_passed == 0){
                 //lcd_clear();
                 //lcd_int(i + 1);
@@ -145,7 +149,6 @@ int main(void){
                 //break;
             }
         }
-    
 
         lcd_clear();
 
@@ -157,4 +160,5 @@ int main(void){
         time_passed += 1;
         _delay_ms(50);     // set animation speed
     }
+
 }

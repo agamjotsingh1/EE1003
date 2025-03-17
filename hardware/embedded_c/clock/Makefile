@@ -9,7 +9,6 @@ F_CPU=16000000
 FORMAT = ihex
 TARGET = main
 SRC = $(TARGET).c
-#ASRC = bcd.S
 ASRC = 
 OPT = s
 

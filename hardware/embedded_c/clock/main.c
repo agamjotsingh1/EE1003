@@ -1,19 +1,11 @@
 #include <avr/io.h> 
+#include <avr/interrupt.h>
 #include <util/delay.h> 
 #include <stdlib.h> 
 
-// ------------------
-// TYPEDEFS
 typedef uint8_t byte;
-
-// ------------------
-// MACROS
-// LOW_BIT -> Sets bit number 'Y' on register 'X' to 0
 #define LOW_BIT(X, Y) X &= ~_BV(Y)
-// HIGH_BIT -> Sets bit number 'Y' on register 'X' to 1
 #define HIGH_BIT(X, Y) X |= _BV(Y)
-
-// SET_BIT -> Sets bit number 'Y' on register 'X' to VAL
 #define SET_BIT(X, Y, VAL) (VAL) ? (HIGH_BIT(X, Y)): (LOW_BIT(X, Y))
 
 // POWER (seven segment) pins
@@ -22,14 +14,29 @@ typedef uint8_t byte;
 #define P3 1
 #define P4 0
 
-// DATA (BCD) pins
-#define DA 2
-#define DB 3
-#define DC 4
-#define DD 5
+int flag = 0;
 
+void init_timer() {
+    // Set CTC mode (WGM12 = 1)
+    TCCR1B |= (1 << WGM12);
+    
+    // Set prescaler to 1024: CS12 = 1, CS10 = 1
+    TCCR1B |= (1 << CS12) | (1 << CS10);
 
-//extern void send_to_bcd(byte val);
+    // Set OCR1A for 1s delay at 16MHz (16,000,000 / 1024 = 15625 ticks per second)
+    OCR1A = 15624;
+
+    // Enable Timer1 compare match interrupt
+    TIMSK1 |= (1 << OCIE1A);
+    
+    // Enable global interrupts
+    sei();
+}
+
+// Timer1 compare match ISR
+ISR(TIMER1_COMPA_vect) {
+    flag = 1;
+}
 
 // instruction time -> 
 void send_to_bcd(int n){
@@ -39,25 +46,25 @@ void send_to_bcd(int n){
     }
 }
 
-void show_time(int h1, int h2, int m1, int m2){
+void display_time(int h1, int h2, int m1, int m2){
     send_to_bcd(h1);
     HIGH_BIT(PORTB, P1);
-    _delay_ms(1.25);
+    _delay_ms(1);
     LOW_BIT(PORTB, P1);
 
     send_to_bcd(h2);
     HIGH_BIT(PORTB, P2);
-    _delay_ms(1.25);
+    _delay_ms(1);
     LOW_BIT(PORTB, P2);
 
     send_to_bcd(m1);
     HIGH_BIT(PORTB, P3);
-    _delay_ms(1.25);
+    _delay_ms(1);
     LOW_BIT(PORTB, P3);
 
     send_to_bcd(m2);
     HIGH_BIT(PORTB, P4);
-    _delay_ms(1.25);
+    _delay_ms(1);
     LOW_BIT(PORTB, P4);
 }
 
@@ -85,24 +92,22 @@ void increment_time(int* h1, int* h2, int* m1, int* m2){
 }
 
 int main(void){
-    // use PortB for LCD interface
-    DDRB = 0xFF; // 1111.1111; set PB0-PB7 as outputs	 
-    DDRD = 0xFF; // 1111.1111; set PD0-PD7 as outputs	 
-
-    int t = 0;
+    DDRB = 0xFF;
+    DDRD = 0xFF;
 
     int h1 = 0;
     int h2 = 0;
     int m1 = 0;
     int m2 = 0;
 
+    init_timer();
+
     while(1){
-        if(t > 200){
+        if(flag){
             increment_time(&h1, &h2, &m1, &m2);
-            t = 0;
+            flag = 0;
         }
 
-        show_time(h1, h2, m1, m2);
-        t++;
+        display_time(h1, h2, m1, m2);
     }
 }
