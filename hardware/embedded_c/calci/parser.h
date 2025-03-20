@@ -1,1 +1,1 @@
-double eval_exp(char buf[64], double ans);
+double eval(char buf[64], double ans);

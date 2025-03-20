@@ -64,7 +64,7 @@ void print_tok_stream(Token* token_stream, short size){
     }
 }
 
-double eval_exp(char buf[64], double ans){
+double eval(char buf[64], double ans){
     Token* token_stream;
     short size = 0;
     short i = 0;
@@ -186,5 +186,10 @@ double eval_exp(char buf[64], double ans){
         }
     }
 
-    return res_stack[0].val.num;
+    double res_num = res_stack[0].val.num;
+
+    free(res_stack);
+    free(output_stack);
+
+    return res_num;
 }

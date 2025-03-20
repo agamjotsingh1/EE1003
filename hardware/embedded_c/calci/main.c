@@ -13,20 +13,34 @@ typedef uint8_t byte;
 // MACROS
 // CLR_BIT -> Clears bit number 'Y' on register 'X'
 #define CLR_BIT(X, Y) X &= ~_BV(Y)
+
 // SET_BIT -> Sets bit number 'Y' on register 'X'
 #define SET_BIT(X, Y) X |= _BV(Y)
+
 // LCD_RS -> R/S (Register Select)
 #define LCD_RS 0 // PB0
+
 // LCD_E -> LCD Enable pin
 #define LCD_E 1 // PB1
+
 // DATA PINS
 #define DB4 2 // pin for DB4
 #define DB5 3 // pin for DB5
 #define DB6 4 // pin for DB6
 #define DB7 5 // pin for DB7
+
 // CLEAR_DISPLAY -> Instruction for clearing display
 #define CLEAR_DISPLAY 0x01
 
+// BUTTON_THRESHOLD -> Sets the button delay between taps
+// equivalent to BUTTON_THRESHOLD*50 ms
+#define BUTTON_THRESHOLD 10
+
+// N_BUTTONS -> Number of active buttons
+#define N_BUTTONS 5
+
+
+/* LCD FUNCTIONS */
 void pulse_enable_line(){
     SET_BIT(PORTB, LCD_E); // take LCD enable line high
     _delay_us(40); // wait 40 microseconds
@@ -91,63 +105,86 @@ void lcd_int(int data){
     lcd_msg(st); // display in on LCD
 }
 
-void clear_button_states(int n, int button_states[n], int i){
-    for(int j = 0; j < n; j++){
-            if(i == j) continue;
-            button_states[j] = 0;
+/* BUTTON FUNCTIONS */
+void button_listener(int* button_x, int* button_y, int* time_lapsed){
+    if(*time_lapsed > BUTTON_THRESHOLD) {
+        *button_x = -1;
+        *button_y = -1;
     }
-}
 
-int which_button(int n, int button_states[n], int *time_passed){
-    for(int i = 0; i < n; i++){
-        if(!(PIND & (1 << 7 - i)) && !(button_states[i])){
-            button_states[i] = 1;
-            clear_button_states(n, button_states, i);
-            *time_passed = 0;
-            return i;
+    if((*button_x != -1) && (*time_lapsed < BUTTON_THRESHOLD)) return;
+
+    for(int k = 0; k < N_BUTTONS; k++){
+        CLR_BIT(PORTD, (k + 2));
+
+        for(int i = 0; i < N_BUTTONS; i++){
+            if(!(PINC & (1 << (i)))){
+                *button_x = k;
+                *button_y = i;
+                *time_lapsed = 0;
+                SET_BIT(PORTD, (k + 2));
+                return;
+            }
         }
+
+        SET_BIT(PORTD, (k + 2));
     }
 
-    return -1;
+    /*
+    *button_x = -1;
+    *button_y = -1;
+    */
+    return;
 }
 
-void switch_off_idle_buttons(int n, int button_states[n], int time_passed){
-    if(time_passed <= 5) return;
-    clear_button_states(n, button_states, -1);
+char button_map(int button_x, int button_y){
+    // 0 - 9 -> {(0, 0), (0, 1), .. (0, 4)} U {(1, 0), (1, 1), .. (1, 4)}
+    if(button_y == 0 || button_y == 1){
+        return ((char) (((button_y*5) + button_x) + '0'));
+    }
+
+    if(button_y == 4){
+        
+    }
+
+    return ' ';
 }
 
 int main(void){
+
+    // Disable ADC (Convert Analog -> Digital)
+    ADCSRA &= ~(1 << ADEN);
+
+    DDRC = 0x00;
+    PORTC = 0xFF; // Setting input pull up
+    
     // use PortB for LCD interface
     DDRB = 0xFF; // 1111.1111; set PB0-PB7 as outputs	 
-    DDRD = 0x00; // 0000.0000; set PD0-PD7 as inputs
+
+    // use PortD for Buttons
+    DDRD = 0xFF; // 0000.0000; set PD0-PD7 as inputs
     PORTD = 0xFF;
 
     lcd_init(); // initialize LCD controller
-    int n = 3;
-    int button_states[3] = {0};
-    int time_passed = 0;
+    
+    int button_x = -1;
+    int button_y = -1;
+    int time_lapsed = 0;
+
     char str[64] = {'\0'};
     int pos = 0;
 
     while(1){
-        int button = which_button(n, button_states, &time_passed);
+        button_listener(&button_x, &button_y, &time_lapsed);
 
-        if(button_states[2] == 1){
-            lcd_clear();
-            //lcd_double(eval_exp(str, 0));
-            lcd_double(1.01);
-            _delay_ms(300);
-            continue;
-        }
-
-        for(int i = 0; i < n - 1; i++){
-            if(button_states[i] == 1 && time_passed == 0){
-                //lcd_clear();
-                //lcd_int(i + 1);
-                str[pos] = (char) (i + '0');
-                pos += 1;
-                //break;
-            }
+        if(button_x != -1 && time_lapsed == 0){
+            /*str[pos] = (char) (button_x + '0');
+            str[pos + 1] = (char) (button_y + '0');
+            str[pos + 2] = ' ';
+            pos += 3;
+            */
+            str[pos] = button_map(button_x, button_y);
+            pos += 1;
         }
 
         lcd_clear();
@@ -155,10 +192,7 @@ int main(void){
         if(pos > 15) lcd_msg(str + pos - 15);
         else lcd_msg(str);
 
-        switch_off_idle_buttons(n, button_states, time_passed);
-
-        time_passed += 1;
+        time_lapsed += 1;
         _delay_ms(50);     // set animation speed
     }
-
 }
