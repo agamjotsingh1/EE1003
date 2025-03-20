@@ -149,7 +149,7 @@ $(TARGET).elf: $(OBJ)
 
 # Program the device.  
 program: $(TARGET).hex $(TARGET).eep
-	#$(AVRDUDE) $(AVRDUDE_FLAGS) $(AVRDUDE_WRITE_FLASH) $(AVRDUDE_WRITE_EEPROM)
+	$(AVRDUDE) $(AVRDUDE_FLAGS) $(AVRDUDE_WRITE_FLASH) $(AVRDUDE_WRITE_EEPROM)
 
 # Target: clean project.
 clean:
@@ -175,6 +175,6 @@ main.o: main.c /usr/avr/include/avr/io.h /usr/avr/include/avr/sfr_defs.h \
  /usr/avr/include/stdint.h /usr/avr/include/avr/iom328p.h \
  /usr/avr/include/avr/portpins.h /usr/avr/include/avr/common.h \
  /usr/avr/include/avr/version.h /usr/avr/include/avr/fuse.h \
- /usr/avr/include/avr/lock.h /usr/avr/include/util/delay.h \
- /usr/avr/include/util/delay_basic.h /usr/avr/include/stdlib.h \
- /usr/lib/gcc/avr/14.2.0/include/stddef.h
+ /usr/avr/include/avr/lock.h /usr/avr/include/avr/interrupt.h \
+ /usr/avr/include/util/delay.h /usr/avr/include/util/delay_basic.h \
+ /usr/avr/include/stdlib.h /usr/lib/gcc/avr/14.2.0/include/stddef.h
