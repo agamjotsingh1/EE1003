@@ -12,15 +12,23 @@ typedef enum {
 } Op;
 
 typedef enum {
+    SIN,
+    COS,
+    TAN
+} Func;
+
+typedef enum {
     NUM,
     OP,
     LBRAK,
-    RBRAK
+    RBRAK,
+    FUNC
 } TokenType;
 
 typedef union {
     double num;
     Op op;
+    Func func;
     unsigned present: 1;
 } TokenVal;
 
@@ -46,7 +54,7 @@ Token pop(Token token_stream[STACK_SIZE], short* size){
     return popped_token;
 }
 
-double eval(char buf[64], double ans){
+double eval(char buf[STACK_SIZE], double ans){
     Token token_stream[STACK_SIZE];
     short size = 0;
 
@@ -87,6 +95,11 @@ double eval(char buf[64], double ans){
             token.val.op = DIV;
             skip = 1;
         }
+        else if(ch == 's'){
+            token.type = FUNC;
+            token.val.func = SIN;
+            skip = 1;
+        }
         else {
             double val;
             sscanf(buf + i, "%lf %n", &val, &skip);
@@ -103,6 +116,8 @@ double eval(char buf[64], double ans){
 
     Token operator_stack[STACK_SIZE];
     short operator_size = 0;
+
+    short is_brak = 0;
     
     for(int i = 0; i < size; i++){
         Token token = token_stream[i];
@@ -111,7 +126,7 @@ double eval(char buf[64], double ans){
             append(output_stack, &output_size, token);
         }
         else if(token.type == OP){
-            if(operator_size > 0){
+            if(operator_size > 0 && !is_brak){
                 Token op_token = operator_stack[operator_size - 1];
                 if(precedence(token.val.op) <= precedence(op_token.val.op)){
                     while(operator_size > 0){
@@ -120,6 +135,19 @@ double eval(char buf[64], double ans){
                 }
             }
 
+            append(operator_stack, &operator_size, token);
+        }
+        else if(token.type == LBRAK){
+            append(operator_stack, &operator_size, token);
+            is_brak = 1;
+        }
+        else if(token.type == RBRAK){
+            while(operator_stack[operator_size].type != LBRAK) {
+                append(output_stack, &output_size, pop(operator_stack, &operator_size));
+            }
+            is_brak = 0;
+        }
+        else if(token.type == FUNC){
             append(operator_stack, &operator_size, token);
         }
     }
@@ -159,6 +187,13 @@ double eval(char buf[64], double ans){
             res_token.val.num = res;
 
             append(res_stack, &res_size, res_token);
+        }
+        else if(token.type == FUNC){
+            if(token.val.func == SIN){
+                Token res_token = pop(res_stack, &res_size);
+                res_token.val.num = 2*res_token.val.num;
+                append(res_stack, &res_size, res_token);
+            }
         }
     }
 

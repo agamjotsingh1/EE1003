@@ -157,38 +157,15 @@ void button_listener(int* button_x, int* button_y, int* debounce){
 
         SET_BIT(PORTD, (k + 2));
     }
-
-    return;
 }
 
 char button_map(int button_x, int button_y){
-    // 0 - 9 -> {(0, 0), (0, 1), .. (0, 4)} U {(1, 0), (1, 1), .. (1, 4)}
-    /*if(button_y == 0 || button_y == 1){
-        return ((char) (((button_y*5) + button_x) + '0'));
-    }
-
-    if(button_y == 3){
-        if(button_x == 0) return '+';
-        else if(button_x == 1) return '-';
-        else if(button_x == 2) return '*';
-        else if(button_x == 3) return '/';
-        else if(button_x == 4) return '+';
-    }
-
-    if(button_y == 4){
-        if(button_x == 0) return '=';
-        else if(button_x == 1) return '.';
-        else if(button_x == 2) return '>';
-        else if(button_x == 3) return '(';
-        else if(button_x == 4) return ')';
-    }*/
-
     char button_map[5][5] = {
         { '0', '1', '2', '3', '4'}, // yellow
         { '5', '6', '7', '8', '9'}, // white
-        { '\0', '\0', '\0', '\0', '\0'}, // black
+        { '(', ')', 's', '\0', '\0'}, // black
         { '+', '-', '*', '/', '\0'}, // blue
-        { '=', '.', '_', '\0', '\0'}, // red
+        { '=', '.', '_', '<', '\0'}, // red
     };
 
     return button_map[button_y][button_x];
@@ -222,18 +199,19 @@ int main(void){
     char buf2[64] = {'\0'};
     int pos2 = 0;
 
+    double ans = 0;
+
     while(1){
         button_listener(&button_x, &button_y, &debounce);
 
         if(button_x != -1 && debounce == 0){
             char mapped_button = button_map(button_x, button_y);
             
-            
             if(mapped_button == '='){
                 is_answer_loop = 1;
                 lcd_clear();
 
-                double ans = eval(buf1, 0);
+                ans = eval(buf1, ans);
                 dtostrf(ans, 16, 5, buf2);
                 pos2 = 16;
                 debounce += 1;
@@ -247,11 +225,13 @@ int main(void){
                 is_answer_loop = 0;
             }
 
-            if(mapped_button == '_'){
+            if(mapped_button == '<'){
+                buf1[pos1 - 1] = '\0';
+                pos1 = pos1 - 1;
+            } else if(mapped_button == '_'){
                 clear_buf(&pos1, buf1);
                 clear_buf(&pos2, buf2);
-            }
-            else {
+            } else {
                 buf1[pos1] = mapped_button;
                 pos1 += 1;
             }
@@ -259,6 +239,6 @@ int main(void){
 
         display_biline(pos1, buf1, pos2, buf2);
         debounce += 1;
-        _delay_ms(50);     // set animation speed
+        _delay_ms(50);
     }
 }
