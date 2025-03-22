@@ -1,23 +1,28 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <math.h>
+#include "funcs.h"
 
-#define STACK_SIZE 64
+#define STACK_SIZE 128
 #define PI 3.14159265358979323846
+#define E 2.7182818284
 
 typedef enum {
     ADD,
     SUB,
     MUL,
-    DIV
+    DIV,
+    POW
 } Op;
 
 typedef enum {
     SIN,
     COS,
     TAN,
-    LN
+    LN,
+    ARCSIN,
+    ARCCOS,
+    ARCTAN
 } Func;
 
 typedef enum {
@@ -43,6 +48,7 @@ typedef struct Token {
 int precedence(Op op){
     if(op == ADD || op == SUB) return 1;
     else if(op == MUL || op == DIV) return 2;
+    else if(op == POW) return 3;
     return -1;
 }
 
@@ -97,30 +103,55 @@ double eval(char buf[STACK_SIZE], double ans){
             token.val.op = DIV;
             skip = 1;
         }
+        else if(ch == '^'){
+            token.type = OP;
+            token.val.op = POW;
+            skip = 1;
+        }
         else if(ch == 'p'){
             token.type = NUM;
             token.val.num = (double) PI;
             skip = 1;
         }
+        else if(ch == 'e'){
+            token.type = NUM;
+            token.val.num = (double) E;
+            skip = 1;
+        }
         else if(ch == 's'){
             token.type = FUNC;
             token.val.func = SIN;
-            skip = 3;
+            skip = 1;
         }
         else if(ch == 'c'){
             token.type = FUNC;
             token.val.func = COS;
-            skip = 3;
+            skip = 1;
         }
         else if(ch == 't'){
             token.type = FUNC;
             token.val.func = TAN;
-            skip = 3;
+            skip = 1;
         }
         else if(ch == 'l'){
             token.type = FUNC;
             token.val.func = LN;
-            skip = 2;
+            skip = 1;
+        }
+        else if(ch == '@'){
+            token.type = FUNC;
+            token.val.func = ARCSIN;
+            skip = 1;
+        }
+        else if(ch == '#'){
+            token.type = FUNC;
+            token.val.func = ARCCOS;
+            skip = 1;
+        }
+        else if(ch == '$'){
+            token.type = FUNC;
+            token.val.func = ARCTAN;
+            skip = 1;
         }
         else {
             double val;
@@ -180,6 +211,7 @@ double eval(char buf[STACK_SIZE], double ans){
 
     Token res_stack[STACK_SIZE];
     short res_size = 0;
+    short is_ans = 1;
 
     for(int i = 0; i < output_size; i++){
         Token token = output_stack[i];
@@ -190,9 +222,13 @@ double eval(char buf[STACK_SIZE], double ans){
             Token right = pop(res_stack, &res_size);
             Token left;
 
-            if(res_size == 0){
+            if(res_size == 0 && is_ans){
                 left.type = NUM;
                 left.val.num = ans;
+            }
+            else if(res_size == 0){
+                left.type = NUM;
+                left.val.num = 0;
             }
             else {
                 left = pop(res_stack, &res_size);
@@ -203,34 +239,25 @@ double eval(char buf[STACK_SIZE], double ans){
             else if(token.val.op == SUB) res = res - right.val.num;
             else if(token.val.op == MUL) res = res * right.val.num;
             else if(token.val.op == DIV) res = res / right.val.num;
+            else if(token.val.op == POW) res = pow(res, right.val.num);
 
             Token res_token;
             res_token.type = NUM;
             res_token.val.num = res;
+            is_ans = 0;
 
             append(res_stack, &res_size, res_token);
         }
         else if(token.type == FUNC){
-            if(token.val.func == SIN){
-                Token res_token = pop(res_stack, &res_size);
-                res_token.val.num = sin(res_token.val.num);
-                append(res_stack, &res_size, res_token);
-            }
-            else if(token.val.func == COS){
-                Token res_token = pop(res_stack, &res_size);
-                res_token.val.num = cos(res_token.val.num);
-                append(res_stack, &res_size, res_token);
-            }
-            else if(token.val.func == TAN){
-                Token res_token = pop(res_stack, &res_size);
-                res_token.val.num = tan(res_token.val.num);
-                append(res_stack, &res_size, res_token);
-            }
-            else if(token.val.func == LN){
-                Token res_token = pop(res_stack, &res_size);
-                res_token.val.num = log(res_token.val.num);
-                append(res_stack, &res_size, res_token);
-            }
+            Token res_token = pop(res_stack, &res_size);
+            if(token.val.func == SIN) res_token.val.num = sin(res_token.val.num);
+            else if(token.val.func == COS) res_token.val.num = cos(res_token.val.num);
+            else if(token.val.func == TAN) res_token.val.num = tan(res_token.val.num);
+            else if(token.val.func == LN) res_token.val.num = ln(res_token.val.num);
+            else if(token.val.func == ARCSIN) res_token.val.num = arcsin(res_token.val.num);
+            else if(token.val.func == ARCCOS) res_token.val.num = arccos(res_token.val.num);
+            else if(token.val.func == ARCTAN) res_token.val.num = arctan(res_token.val.num);
+            append(res_stack, &res_size, res_token);
         }
     }
 

@@ -8,7 +8,7 @@
 // ------------------
 // TYPEDEFS
 typedef uint8_t byte;
-#define MAX_SIZE 64
+#define MAX_SIZE 128
 
 // ------------------
 // MACROS
@@ -55,9 +55,9 @@ void set_buf(int* pos, char* buf, const char* str){
     }
 }
 
-void double_to_buf(int* pos, char* buf, double val){
-    dtostrf(val, 16, 5, buf);
-    *pos = 16;
+int is_func(char repr){
+    return (repr == 's' || repr == 'c' || repr == 't' || repr == 'l' ||
+            repr == '@' || repr == '#' || repr == '$');
 }
 
 /* LCD FUNCTIONS */
@@ -121,7 +121,8 @@ void lcd_int(int data){
 void display_biline(int pos1, char* buf1, int pos2, char* buf2){
     lcd_clear();
 
-    char buf_cpy[MAX_SIZE];
+    char buf_cpy[MAX_SIZE] = {'\0'};
+    int offset = 0;
 
     if(
         buf1[0] == '+' ||
@@ -129,19 +130,74 @@ void display_biline(int pos1, char* buf1, int pos2, char* buf2){
         buf1[0] == '*' ||
         buf1[0] == '/' 
     ) {
-        strcpy(buf_cpy + 3, buf1);
         buf_cpy[0] = 'A';
         buf_cpy[1] = 'n';
         buf_cpy[2] = 's';
-        pos1 = pos1 + 3;
+        offset = 3;
     }
-    else strcpy(buf_cpy, buf1);
 
     for(int i = 0; i < pos1; i++){
-        if(buf_cpy[i] == 'p'){
-            buf_cpy[i] = (char) (247);
+        char ch = buf1[i];
+
+        if(ch == 's'){
+            buf_cpy[i + offset] = 's';
+            buf_cpy[i + offset + 1] = 'i';
+            buf_cpy[i + offset + 2] = 'n';
+            offset += 2;
+        }
+        else if(ch == 'c'){
+            buf_cpy[i + offset] = 'c';
+            buf_cpy[i + offset + 1] = 'o';
+            buf_cpy[i + offset + 2] = 's';
+            offset += 2;
+        }
+        else if(ch == 'c'){
+            buf_cpy[i + offset] = 'c';
+            buf_cpy[i + offset + 1] = 'o';
+            buf_cpy[i + offset + 2] = 's';
+            offset += 2;
+        }
+        else if(ch == 't'){
+            buf_cpy[i + offset] = 't';
+            buf_cpy[i + offset + 1] = 'a';
+            buf_cpy[i + offset + 2] = 'n';
+            offset += 2;
+        }
+        else if(ch == 'l'){
+            buf_cpy[i + offset] = 'l';
+            buf_cpy[i + offset + 1] = 'n';
+            offset += 1;
+        }
+        else if(ch == '@'){
+            buf_cpy[i + offset] = 'a';
+            buf_cpy[i + offset + 1] = 's';
+            buf_cpy[i + offset + 2] = 'i';
+            buf_cpy[i + offset + 3] = 'n';
+            offset += 3;
+        }
+        else if(ch == '#'){
+            buf_cpy[i + offset] = 'a';
+            buf_cpy[i + offset + 1] = 'c';
+            buf_cpy[i + offset + 2] = 'o';
+            buf_cpy[i + offset + 3] = 's';
+            offset += 3;
+        }
+        else if(ch == '$'){
+            buf_cpy[i + offset] = 'a';
+            buf_cpy[i + offset + 1] = 't';
+            buf_cpy[i + offset + 2] = 'a';
+            buf_cpy[i + offset + 3] = 'n';
+            offset += 3;
+        }
+        else if(ch == 'p'){
+            buf_cpy[i + offset] = (char) (247);
+        }
+        else {
+            buf_cpy[i + offset] = ch; 
         }
     }
+
+    pos1 += offset;
 
     lcd_cmd(0x80);
     if(pos1 > 16) lcd_msg(buf_cpy + pos1 - 15);
@@ -183,6 +239,12 @@ void button_listener(int* button_x, int* button_y, int* debounce){
 }
 
 char button_map(int button_x, int button_y, int is_mode){
+    /*
+     * @ -> arcsin
+     * # -> arccos
+     * $ -> arctan
+     * & -> mode change
+     */
     char button_map[5][5] = {
         { '0', '1', '2', '3', '4'}, // yellow
         { '5', '6', '7', '8', '9'}, // white
@@ -259,6 +321,10 @@ int main(void){
             }
 
             if(mapped_button == '<'){
+                if(pos1 >= 2 && buf1[pos1 - 1] == '(' && is_func(buf1[pos1 - 2])) { 
+                    buf1[pos1 - 2] = '\0';
+                    pos1 = pos1 - 1;
+                }
                 buf1[pos1 - 1] = '\0';
                 pos1 = pos1 - 1;
             }
@@ -266,33 +332,10 @@ int main(void){
                 clear_buf(&pos1, buf1);
                 clear_buf(&pos2, buf2);
             }
-            else if(mapped_button == 's'){
-                buf1[pos1] = 's';
-                buf1[pos1 + 1] = 'i';
-                buf1[pos1 + 2] = 'n';
-                buf1[pos1 + 3] = '(';
-                pos1 += 4;
-            }
-            else if(mapped_button == 'c'){
-                buf1[pos1] = 'c';
-                buf1[pos1 + 1] = 'o';
-                buf1[pos1 + 2] = 's';
-                buf1[pos1 + 3] = '(';
-                pos1 += 4;
-            }
-            else if(mapped_button == 't'){
-                buf1[pos1] = 't';
-                buf1[pos1 + 1] = 'a';
-                buf1[pos1 + 2] = 'n';
-                buf1[pos1 + 3] = '(';
-                pos1 += 4;
-            }
-            else if(mapped_button == 'l'){
-                buf1[pos1] = 'l';
-                buf1[pos1 + 1] = 'n';
-                buf1[pos1 + 2] = '(';
-                pos1 += 3;
-
+            else if(is_func(mapped_button)){
+                buf1[pos1] = mapped_button;
+                buf1[pos1 + 1] = '(';
+                pos1 += 2;
             }
             else if(mapped_button == '&'){
                 is_mode = !is_mode;

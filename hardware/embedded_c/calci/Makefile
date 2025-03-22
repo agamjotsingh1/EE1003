@@ -9,7 +9,7 @@ F_CPU=16000000
 FORMAT = ihex
 TARGET = main
 SRC = $(TARGET).c
-ASRC = parser.c
+ASRC = parser.c funcs.c
 OPT = s
 
 # Name of this Makefile (used for "make depend").
@@ -178,4 +178,5 @@ parser.o: parser.c /usr/avr/include/stdio.h /usr/avr/include/inttypes.h \
  /usr/lib/gcc/avr/14.2.0/include/stdint.h /usr/avr/include/stdint.h \
  /usr/lib/gcc/avr/14.2.0/include/stdarg.h \
  /usr/lib/gcc/avr/14.2.0/include/stddef.h /usr/avr/include/stdlib.h \
- /usr/avr/include/string.h
+ /usr/avr/include/string.h funcs.h
+funcs.o: funcs.c
