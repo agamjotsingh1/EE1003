@@ -1,8 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 
 #define STACK_SIZE 64
+#define PI 3.14159265358979323846
 
 typedef enum {
     ADD,
@@ -14,7 +16,8 @@ typedef enum {
 typedef enum {
     SIN,
     COS,
-    TAN
+    TAN,
+    LN
 } Func;
 
 typedef enum {
@@ -45,8 +48,7 @@ int precedence(Op op){
 
 void append(Token token_stream[STACK_SIZE], short* size, Token token){
     token_stream[*size] = token;
-    *size = *size + 1;
-}
+    *size = *size + 1; }
 
 Token pop(Token token_stream[STACK_SIZE], short* size){
     Token popped_token = token_stream[*size - 1];
@@ -95,10 +97,30 @@ double eval(char buf[STACK_SIZE], double ans){
             token.val.op = DIV;
             skip = 1;
         }
+        else if(ch == 'p'){
+            token.type = NUM;
+            token.val.num = (double) PI;
+            skip = 1;
+        }
         else if(ch == 's'){
             token.type = FUNC;
             token.val.func = SIN;
-            skip = 1;
+            skip = 3;
+        }
+        else if(ch == 'c'){
+            token.type = FUNC;
+            token.val.func = COS;
+            skip = 3;
+        }
+        else if(ch == 't'){
+            token.type = FUNC;
+            token.val.func = TAN;
+            skip = 3;
+        }
+        else if(ch == 'l'){
+            token.type = FUNC;
+            token.val.func = LN;
+            skip = 2;
         }
         else {
             double val;
@@ -191,7 +213,22 @@ double eval(char buf[STACK_SIZE], double ans){
         else if(token.type == FUNC){
             if(token.val.func == SIN){
                 Token res_token = pop(res_stack, &res_size);
-                res_token.val.num = 2*res_token.val.num;
+                res_token.val.num = sin(res_token.val.num);
+                append(res_stack, &res_size, res_token);
+            }
+            else if(token.val.func == COS){
+                Token res_token = pop(res_stack, &res_size);
+                res_token.val.num = cos(res_token.val.num);
+                append(res_stack, &res_size, res_token);
+            }
+            else if(token.val.func == TAN){
+                Token res_token = pop(res_stack, &res_size);
+                res_token.val.num = tan(res_token.val.num);
+                append(res_stack, &res_size, res_token);
+            }
+            else if(token.val.func == LN){
+                Token res_token = pop(res_stack, &res_size);
+                res_token.val.num = log(res_token.val.num);
                 append(res_stack, &res_size, res_token);
             }
         }

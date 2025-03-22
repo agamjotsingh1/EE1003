@@ -8,6 +8,7 @@
 // ------------------
 // TYPEDEFS
 typedef uint8_t byte;
+#define MAX_SIZE 64
 
 // ------------------
 // MACROS
@@ -120,9 +121,31 @@ void lcd_int(int data){
 void display_biline(int pos1, char* buf1, int pos2, char* buf2){
     lcd_clear();
 
+    char buf_cpy[MAX_SIZE];
+
+    if(
+        buf1[0] == '+' ||
+        buf1[0] == '-' ||
+        buf1[0] == '*' ||
+        buf1[0] == '/' 
+    ) {
+        strcpy(buf_cpy + 3, buf1);
+        buf_cpy[0] = 'A';
+        buf_cpy[1] = 'n';
+        buf_cpy[2] = 's';
+        pos1 = pos1 + 3;
+    }
+    else strcpy(buf_cpy, buf1);
+
+    for(int i = 0; i < pos1; i++){
+        if(buf_cpy[i] == 'p'){
+            buf_cpy[i] = (char) (247);
+        }
+    }
+
     lcd_cmd(0x80);
-    if(pos1 > 16) lcd_msg(buf1 + pos1 - 15);
-    else lcd_msg(buf1);
+    if(pos1 > 16) lcd_msg(buf_cpy + pos1 - 15);
+    else lcd_msg(buf_cpy);
 
     lcd_cmd(0xC0);
     if(pos2 > 16) lcd_msg(buf2 + pos2 - 15);
@@ -159,15 +182,24 @@ void button_listener(int* button_x, int* button_y, int* debounce){
     }
 }
 
-char button_map(int button_x, int button_y){
+char button_map(int button_x, int button_y, int is_mode){
     char button_map[5][5] = {
         { '0', '1', '2', '3', '4'}, // yellow
         { '5', '6', '7', '8', '9'}, // white
-        { '(', ')', 's', '\0', '\0'}, // black
-        { '+', '-', '*', '/', '\0'}, // blue
-        { '=', '.', '_', '<', '\0'}, // red
+        { '(', ')', 's', 'c', 't'}, // black
+        { '+', '-', '*', '/', '^'}, // blue
+        { '=', '.', '_', '<', '&'}, // red
     };
 
+    char button_map_mode[5][5] = {
+        { '0', '1', '2', '3', '4'}, // yellow
+        { '5', '6', '7', '8', '9'}, // white
+        { '(', ')', '@', '#', '$'}, // black
+        { '+', 'e', 'p', '%', 'l'}, // blue
+        { '=', '.', '_', '<', '&'}, // red
+    };
+
+    if(is_mode) return button_map_mode[button_y][button_x];
     return button_map[button_y][button_x];
 }
 
@@ -193,19 +225,20 @@ int main(void){
     int debounce = 0;
     int is_answer_loop = 0;
 
-    char buf1[64] = {'\0'};
+    char buf1[MAX_SIZE] = {'\0'};
     int pos1 = 0;
 
-    char buf2[64] = {'\0'};
+    char buf2[MAX_SIZE] = {'\0'};
     int pos2 = 0;
 
     double ans = 0;
+    int is_mode = 0;
 
     while(1){
         button_listener(&button_x, &button_y, &debounce);
 
         if(button_x != -1 && debounce == 0){
-            char mapped_button = button_map(button_x, button_y);
+            char mapped_button = button_map(button_x, button_y, is_mode);
             
             if(mapped_button == '='){
                 is_answer_loop = 1;
@@ -220,7 +253,7 @@ int main(void){
             }
             
             if(is_answer_loop){
-                clear_buf(&pos1, buf1);
+                if(mapped_button != '<') clear_buf(&pos1, buf1);
                 clear_buf(&pos2, buf2);
                 is_answer_loop = 0;
             }
@@ -228,10 +261,43 @@ int main(void){
             if(mapped_button == '<'){
                 buf1[pos1 - 1] = '\0';
                 pos1 = pos1 - 1;
-            } else if(mapped_button == '_'){
+            }
+            else if(mapped_button == '_'){
                 clear_buf(&pos1, buf1);
                 clear_buf(&pos2, buf2);
-            } else {
+            }
+            else if(mapped_button == 's'){
+                buf1[pos1] = 's';
+                buf1[pos1 + 1] = 'i';
+                buf1[pos1 + 2] = 'n';
+                buf1[pos1 + 3] = '(';
+                pos1 += 4;
+            }
+            else if(mapped_button == 'c'){
+                buf1[pos1] = 'c';
+                buf1[pos1 + 1] = 'o';
+                buf1[pos1 + 2] = 's';
+                buf1[pos1 + 3] = '(';
+                pos1 += 4;
+            }
+            else if(mapped_button == 't'){
+                buf1[pos1] = 't';
+                buf1[pos1 + 1] = 'a';
+                buf1[pos1 + 2] = 'n';
+                buf1[pos1 + 3] = '(';
+                pos1 += 4;
+            }
+            else if(mapped_button == 'l'){
+                buf1[pos1] = 'l';
+                buf1[pos1 + 1] = 'n';
+                buf1[pos1 + 2] = '(';
+                pos1 += 3;
+
+            }
+            else if(mapped_button == '&'){
+                is_mode = !is_mode;
+            }
+            else {
                 buf1[pos1] = mapped_button;
                 pos1 += 1;
             }
@@ -239,6 +305,6 @@ int main(void){
 
         display_biline(pos1, buf1, pos2, buf2);
         debounce += 1;
-        _delay_ms(50);
+        _delay_ms(20);
     }
 }
