@@ -24,7 +24,7 @@ CSTANDARD = -std=gnu99
 #CSTANDARD = -std=gnu11
 
 # Place -D or -U options here
-CDEFS =
+CDEFS = 
 
 # Place -I options here
 CINCS =
@@ -33,7 +33,7 @@ CINCS =
 CDEBUG = -g
 CWARN = -Wall -Wstrict-prototypes
 CTUNING = -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums
-CFLAGS = $(CDEBUG) $(CDEFS) $(CINCS) -O$(OPT) -O2 $(CWARN) $(CSTANDARD) $(CEXTRA) 
+CFLAGS = $(CDEBUG) $(CDEFS) $(CINCS) -O$(OPT) -O2 $(CWARN) $(CSTANDARD) $(CEXTRA)  -Wl,-u,vfscanf -lscanf_flt -lm
 CPPFLAGS=-DF_CPU=$(F_CPU)L
 ASFLAGS = -Wa,-adhlns=$(<:.S=.lst),-gstabs 
 
@@ -171,8 +171,9 @@ main.o: main.c /usr/avr/include/avr/io.h /usr/avr/include/avr/sfr_defs.h \
  /usr/avr/include/avr/portpins.h /usr/avr/include/avr/common.h \
  /usr/avr/include/avr/version.h /usr/avr/include/avr/fuse.h \
  /usr/avr/include/avr/lock.h /usr/avr/include/util/delay.h \
- /usr/avr/include/util/delay_basic.h /usr/avr/include/stdlib.h \
- /usr/lib/gcc/avr/14.2.0/include/stddef.h
+ /usr/avr/include/util/delay_basic.h parser.h /usr/avr/include/stdlib.h \
+ /usr/lib/gcc/avr/14.2.0/include/stddef.h /usr/avr/include/string.h \
+ /usr/avr/include/stdio.h /usr/lib/gcc/avr/14.2.0/include/stdarg.h
 parser.o: parser.c /usr/avr/include/stdio.h /usr/avr/include/inttypes.h \
  /usr/lib/gcc/avr/14.2.0/include/stdint.h /usr/avr/include/stdint.h \
  /usr/lib/gcc/avr/14.2.0/include/stdarg.h \

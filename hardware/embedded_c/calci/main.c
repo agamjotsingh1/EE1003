@@ -34,11 +34,30 @@ typedef uint8_t byte;
 
 // BUTTON_THRESHOLD -> Sets the button delay between taps
 // equivalent to BUTTON_THRESHOLD*50 ms
+//#define BUTTON_THRESHOLD 10
 #define BUTTON_THRESHOLD 10
 
 // N_BUTTONS -> Number of active buttons
 #define N_BUTTONS 5
 
+/* UTILITY FUNCTIONS */
+void clear_buf(int* len, char* buf){
+    for(int i = 0; i < *len; i++) buf[i] = '\0';
+    *len = 0;
+}
+
+void set_buf(int* pos, char* buf, const char* str){
+    *pos = 0;
+    while(*str){
+        buf[*pos] = *str++;
+        *pos = *pos + 1;
+    }
+}
+
+void double_to_buf(int* pos, char* buf, double val){
+    dtostrf(val, 16, 5, buf);
+    *pos = 16;
+}
 
 /* LCD FUNCTIONS */
 void pulse_enable_line(){
@@ -92,27 +111,36 @@ void lcd_msg(const char *text){
         lcd_char(*text++); // send char & update char pointer
 }
 
-void lcd_double(double data){
-    char* st; // save enough space for result
-    snprintf(st, 7, "%lf", data);
-    while(*st) lcd_char(*st++);
-    //lcd_msg(st); // display in on LCD
-}
-
 void lcd_int(int data){
     char st[8] = ""; // save enough space for result
     itoa(data,st,10); // convert integer to ascii 
     lcd_msg(st); // display in on LCD
 }
 
+void display_biline(int pos1, char* buf1, int pos2, char* buf2){
+    lcd_clear();
+
+    lcd_cmd(0x80);
+    if(pos1 > 16) lcd_msg(buf1 + pos1 - 15);
+    else lcd_msg(buf1);
+
+    lcd_cmd(0xC0);
+    if(pos2 > 16) lcd_msg(buf2 + pos2 - 15);
+    else lcd_msg(buf2);
+
+    lcd_cmd(0x80);
+
+    for(int i = 0; i < (pos1 > 16 ? 15: pos1); i++) lcd_cmd(0x14);
+}
+
 /* BUTTON FUNCTIONS */
-void button_listener(int* button_x, int* button_y, int* time_lapsed){
-    if(*time_lapsed > BUTTON_THRESHOLD) {
+void button_listener(int* button_x, int* button_y, int* debounce){
+    if(*debounce > BUTTON_THRESHOLD) {
         *button_x = -1;
         *button_y = -1;
     }
 
-    if((*button_x != -1) && (*time_lapsed < BUTTON_THRESHOLD)) return;
+    if((*button_x != -1) && (*debounce < BUTTON_THRESHOLD)) return;
 
     for(int k = 0; k < N_BUTTONS; k++){
         CLR_BIT(PORTD, (k + 2));
@@ -121,7 +149,7 @@ void button_listener(int* button_x, int* button_y, int* time_lapsed){
             if(!(PINC & (1 << (i)))){
                 *button_x = k;
                 *button_y = i;
-                *time_lapsed = 0;
+                *debounce = 0;
                 SET_BIT(PORTD, (k + 2));
                 return;
             }
@@ -130,24 +158,40 @@ void button_listener(int* button_x, int* button_y, int* time_lapsed){
         SET_BIT(PORTD, (k + 2));
     }
 
-    /*
-    *button_x = -1;
-    *button_y = -1;
-    */
     return;
 }
 
 char button_map(int button_x, int button_y){
     // 0 - 9 -> {(0, 0), (0, 1), .. (0, 4)} U {(1, 0), (1, 1), .. (1, 4)}
-    if(button_y == 0 || button_y == 1){
+    /*if(button_y == 0 || button_y == 1){
         return ((char) (((button_y*5) + button_x) + '0'));
     }
 
-    if(button_y == 4){
-        
+    if(button_y == 3){
+        if(button_x == 0) return '+';
+        else if(button_x == 1) return '-';
+        else if(button_x == 2) return '*';
+        else if(button_x == 3) return '/';
+        else if(button_x == 4) return '+';
     }
 
-    return ' ';
+    if(button_y == 4){
+        if(button_x == 0) return '=';
+        else if(button_x == 1) return '.';
+        else if(button_x == 2) return '>';
+        else if(button_x == 3) return '(';
+        else if(button_x == 4) return ')';
+    }*/
+
+    char button_map[5][5] = {
+        { '0', '1', '2', '3', '4'}, // yellow
+        { '5', '6', '7', '8', '9'}, // white
+        { '\0', '\0', '\0', '\0', '\0'}, // black
+        { '+', '-', '*', '/', '\0'}, // blue
+        { '=', '.', '_', '\0', '\0'}, // red
+    };
+
+    return button_map[button_y][button_x];
 }
 
 int main(void){
@@ -169,30 +213,52 @@ int main(void){
     
     int button_x = -1;
     int button_y = -1;
-    int time_lapsed = 0;
+    int debounce = 0;
+    int is_answer_loop = 0;
 
-    char str[64] = {'\0'};
-    int pos = 0;
+    char buf1[64] = {'\0'};
+    int pos1 = 0;
+
+    char buf2[64] = {'\0'};
+    int pos2 = 0;
 
     while(1){
-        button_listener(&button_x, &button_y, &time_lapsed);
+        button_listener(&button_x, &button_y, &debounce);
 
-        if(button_x != -1 && time_lapsed == 0){
-            /*str[pos] = (char) (button_x + '0');
-            str[pos + 1] = (char) (button_y + '0');
-            str[pos + 2] = ' ';
-            pos += 3;
-            */
-            str[pos] = button_map(button_x, button_y);
-            pos += 1;
+        if(button_x != -1 && debounce == 0){
+            char mapped_button = button_map(button_x, button_y);
+            
+            
+            if(mapped_button == '='){
+                is_answer_loop = 1;
+                lcd_clear();
+
+                double ans = eval(buf1, 0);
+                dtostrf(ans, 16, 5, buf2);
+                pos2 = 16;
+                debounce += 1;
+                _delay_ms(50);
+                continue;
+            }
+            
+            if(is_answer_loop){
+                clear_buf(&pos1, buf1);
+                clear_buf(&pos2, buf2);
+                is_answer_loop = 0;
+            }
+
+            if(mapped_button == '_'){
+                clear_buf(&pos1, buf1);
+                clear_buf(&pos2, buf2);
+            }
+            else {
+                buf1[pos1] = mapped_button;
+                pos1 += 1;
+            }
         }
 
-        lcd_clear();
-
-        if(pos > 15) lcd_msg(str + pos - 15);
-        else lcd_msg(str);
-
-        time_lapsed += 1;
+        display_biline(pos1, buf1, pos2, buf2);
+        debounce += 1;
         _delay_ms(50);     // set animation speed
     }
 }

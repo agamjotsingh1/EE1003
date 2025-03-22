@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define STACK_SIZE 64
+
 typedef enum {
     ADD,
     SUB,
@@ -33,47 +35,27 @@ int precedence(Op op){
     return -1;
 }
 
-void append(Token** token_stream, short* size, Token token){
-    if(*size == 0) *token_stream = (Token *) malloc(sizeof(Token));
-    else *token_stream = (Token *) realloc(*token_stream, sizeof(Token) * (*size + 1));
-
-    (*token_stream)[*size] = token;
+void append(Token token_stream[STACK_SIZE], short* size, Token token){
+    token_stream[*size] = token;
     *size = *size + 1;
 }
 
-Token pop(Token** token_stream, short* size){
-    Token popped_token = (*token_stream)[*size - 1];
-    //free(*token_stream + *size - 1);
-    *token_stream = (Token *) realloc(*token_stream, sizeof(Token) * (*size - 1));
+Token pop(Token token_stream[STACK_SIZE], short* size){
+    Token popped_token = token_stream[*size - 1];
     *size = *size - 1;
     return popped_token;
 }
 
-void print_tok_stream(Token* token_stream, short size){
-    for(int i = 0; i < size; i++){
-        Token token = token_stream[i];
-        if(token.type == NUM){
-            printf("%lf", token.val.num);
-        }
-        else if(token.type == OP){
-            if(token.val.op == ADD) printf("+");
-            else if(token.val.op == SUB) printf("-");
-            else if(token.val.op == MUL) printf("*");
-            else if(token.val.op == DIV) printf("/");
-        }
-    }
-}
-
 double eval(char buf[64], double ans){
-    Token* token_stream;
+    Token token_stream[STACK_SIZE];
     short size = 0;
+
     short i = 0;
 
     while(i < 64 && buf[i] != '\0'){
         Token token;
         char ch = buf[i];
         int skip = 0;
-        int is_int = 0;
         
         if(ch == '('){
             token.type = LBRAK;
@@ -110,58 +92,52 @@ double eval(char buf[64], double ans){
             sscanf(buf + i, "%lf %n", &val, &skip);
             token.type = NUM;
             token.val.num = val;
-            is_int = 1;
         }
 
-        if(size == 0) token_stream = (Token *) malloc(sizeof(Token));
-        else token_stream = (Token *) realloc(token_stream, sizeof(Token) * (size + 1));
-
-        token_stream[size] = token;
-        size += 1; 
+        append(token_stream, &size, token);
         i += skip;
     }
 
-    Token* output_stack;
+    Token output_stack[STACK_SIZE];
     short output_size = 0;
 
-    Token* operator_stack;
+    Token operator_stack[STACK_SIZE];
     short operator_size = 0;
     
     for(int i = 0; i < size; i++){
         Token token = token_stream[i];
 
         if(token.type == NUM){
-            append(&output_stack, &output_size, token);
+            append(output_stack, &output_size, token);
         }
         else if(token.type == OP){
             if(operator_size > 0){
                 Token op_token = operator_stack[operator_size - 1];
                 if(precedence(token.val.op) <= precedence(op_token.val.op)){
                     while(operator_size > 0){
-                        append(&output_stack, &output_size, pop(&operator_stack, &operator_size));
+                        append(output_stack, &output_size, pop(operator_stack, &operator_size));
                     }
                 }
             }
-            append(&operator_stack, &operator_size, token);
+
+            append(operator_stack, &operator_size, token);
         }
     }
 
     while(operator_size > 0){
-        append(&output_stack, &output_size, pop(&operator_stack, &operator_size));
+        append(output_stack, &output_size, pop(operator_stack, &operator_size));
     }
 
-    free(operator_stack);
-    Token* res_stack;
+    Token res_stack[STACK_SIZE];
     short res_size = 0;
 
     for(int i = 0; i < output_size; i++){
         Token token = output_stack[i];
         if(token.type == NUM){
-            append(&res_stack, &res_size, token);
+            append(res_stack, &res_size, token);
         }
         else if(token.type == OP){
-            Token right = pop(&res_stack, &res_size);
-
+            Token right = pop(res_stack, &res_size);
             Token left;
 
             if(res_size == 0){
@@ -169,7 +145,7 @@ double eval(char buf[64], double ans){
                 left.val.num = ans;
             }
             else {
-                left = pop(&res_stack, &res_size);
+                left = pop(res_stack, &res_size);
             }
 
             double res = left.val.num;
@@ -182,14 +158,9 @@ double eval(char buf[64], double ans){
             res_token.type = NUM;
             res_token.val.num = res;
 
-            append(&res_stack, &res_size, res_token);
+            append(res_stack, &res_size, res_token);
         }
     }
 
-    double res_num = res_stack[0].val.num;
-
-    free(res_stack);
-    free(output_stack);
-
-    return res_num;
+    return res_stack[0].val.num;
 }
