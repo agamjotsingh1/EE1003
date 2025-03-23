@@ -33,7 +33,7 @@ CINCS =
 CDEBUG = -g
 CWARN = -Wall -Wstrict-prototypes
 CTUNING = -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums
-CFLAGS = $(CDEBUG) $(CDEFS) $(CINCS) -O$(OPT) -O2 $(CWARN) $(CSTANDARD) $(CEXTRA)  -Wl,-u,vfscanf -lscanf_flt -lm
+CFLAGS = $(CDEBUG) $(CDEFS) $(CINCS) -O$(OPT) -O2 $(CWARN) $(CSTANDARD) $(CEXTRA)  -Wl,-u,vfscanf -lscanf_flt -Wl,-u,vfprintf -lprintf_flt
 CPPFLAGS=-DF_CPU=$(F_CPU)L
 ASFLAGS = -Wa,-adhlns=$(<:.S=.lst),-gstabs 
 

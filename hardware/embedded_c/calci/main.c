@@ -1,6 +1,7 @@
 #include <avr/io.h> 
 #include <util/delay.h> 
 #include "parser.h"
+#include "funcs.h"
 #include <stdlib.h>
 #include "string.h"
 #include <stdio.h>
@@ -307,7 +308,8 @@ int main(void){
                 lcd_clear();
 
                 ans = eval(buf1, ans);
-                dtostrf(ans, 16, 5, buf2);
+                if(ans > 1e15) sprintf(buf2, "%16.*e", ans);
+                else dtostrf(ans, 16, 5, buf2);
                 pos2 = 16;
                 debounce += 1;
                 display_biline(pos1, buf1, pos2, buf2);
@@ -340,6 +342,17 @@ int main(void){
             }
             else if(mapped_button == '&'){
                 is_mode = !is_mode;
+            }
+            else if(mapped_button == '('){
+                char mutated_button = '(';
+
+                if(pos1 > 0){
+                    char prev
+                    if()
+                }
+                buf1[pos1] = mutated_button;
+                pos1 += 1;
+
             }
             else {
                 buf1[pos1] = mapped_button;
