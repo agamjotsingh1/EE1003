@@ -179,9 +179,7 @@ void display_biline(int pos1, char* buf1, int pos2, char* buf2){
             offset += 3;
         }
         else if(ch == '#'){
-            buf_cpy[i + offset] = 'a';
-            buf_cpy[i + offset + 1] = 'c';
-            buf_cpy[i + offset + 2] = 'o';
+            buf_cpy[i + offset] = 'a'; buf_cpy[i + offset + 1] = 'c'; buf_cpy[i + offset + 2] = 'o';
             buf_cpy[i + offset + 3] = 's';
             offset += 3;
         }
@@ -251,7 +249,7 @@ char button_map(int button_x, int button_y, int is_mode){
     char button_map[5][5] = {
         { '0', '1', '2', '3', '4'}, // yellow
         { '5', '6', '7', '8', '9'}, // white
-        { '(', 'm', 's', 'c', 't'}, // black
+        { '(', 'f', 's', 'c', 't'}, // black
         { '+', '-', '*', '/', '^'}, // blue
         { '=', '.', '_', '<', '&'}, // red
     };
@@ -259,7 +257,7 @@ char button_map(int button_x, int button_y, int is_mode){
     char button_map_mode[5][5] = {
         { '0', '1', '2', '3', '4'}, // yellow
         { '5', '6', '7', '8', '9'}, // white
-        { '(', 'M', '@', '#', '$'}, // black
+        { 'm', 'M', '@', '#', '$'}, // black
         { '!', 'e', 'p', '%', 'l'}, // blue
         { '=', '.', '_', '<', '&'}, // red
     };
@@ -298,6 +296,8 @@ int main(void){
     double ans = 0;
     int is_mode = 0;
 
+    int braks = 0;
+
     while(1){
         button_listener(&button_x, &button_y, &debounce);
 
@@ -308,9 +308,15 @@ int main(void){
                 is_answer_loop = 1;
                 lcd_clear();
 
+                for(int i = 0; i < braks; i++){
+                    buf1[pos1] = ')';
+                    pos1 += 1;
+                }
+
                 ans = eval(buf1, ans);
                 if(ans > 1e15) sprintf(buf2, "%16.*e", ans);
                 else dtostrf(ans, 16, 5, buf2);
+
                 pos2 = 16;
                 debounce += 1;
                 display_biline(pos1, buf1, pos2, buf2);
@@ -324,11 +330,31 @@ int main(void){
                 _delay_ms(50);
                 continue;
             }
+            else if(mapped_button == 'f'){
+                if(is_answer_loop){
+                    int numerator;
+                    int denominator;
+                    dtf(ans, &numerator, &denominator);
+
+                    char temp[16];
+                    sprintf(buf2, "%d/%d", (int) numerator, (int) denominator);
+                    //clear_buf(&pos2, buf2);
+
+                    //sprintf(buf2, "%16s", temp);
+                    //pos2 = 16;
+                    display_biline(pos1, buf1, pos2, buf2);
+                }
+
+                debounce += 1;
+                _delay_ms(50);
+                continue;
+            }
 
             if(is_answer_loop){
-                if(mapped_button != '<') clear_buf(&pos1, buf1);
+                if(mapped_button != '<' && mapped_button != '(') clear_buf(&pos1, buf1);
                 clear_buf(&pos2, buf2);
                 is_answer_loop = 0;
+                braks = 0;
             }
 
             if(mapped_button == '<'){
@@ -346,6 +372,7 @@ int main(void){
             else if(is_func(mapped_button)){
                 buf1[pos1] = mapped_button;
                 buf1[pos1 + 1] = '(';
+                braks++;
                 pos1 += 2;
             }
             else if(mapped_button == '&'){
@@ -354,8 +381,11 @@ int main(void){
             else if(mapped_button == '('){
                 if(pos1 > 0){
                     char prev_ch = buf1[pos1 - 1];
-                    if((prev_ch == ')') || (prev_ch >= '0' && prev_ch <= '9')) mapped_button = ')';
+                    if((prev_ch == ')') || (prev_ch >= '0' && prev_ch <= '9') || (prev_ch == 'M')) mapped_button = ')';
                 }
+
+                if(mapped_button == ')') braks -= 1;
+                else braks += 1;
 
                 buf1[pos1] = mapped_button;
                 pos1 += 1;

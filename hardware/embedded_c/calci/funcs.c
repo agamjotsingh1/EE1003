@@ -2,6 +2,7 @@
 
 #define PI 3.14159265358979323846
 #define H 0.01
+#define MAX_ITERS 100000
 
 double fast_inv_sqrt(double x){
     if(x <= 0) return 0;
@@ -164,4 +165,26 @@ double factorial(double n) {
     }
     
     return result;
+}
+
+int gcd(int a, int b) {
+    int temp;
+
+    while (b != 0) {
+        temp = b;
+        b = a % b;
+        a = temp;
+    }
+
+    return a;
+}
+
+void dtf(double decimal, long int* numerator, long int* denominator) {
+    *numerator = (int)(decimal * 1000000);
+    *denominator = 1000000;
+    
+    int gcd_ = gcd(*numerator, *denominator);
+    
+    *numerator = *numerator/gcd_;
+    *denominator = *denominator/gcd_;
 }
