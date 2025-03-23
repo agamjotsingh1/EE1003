@@ -1,4 +1,5 @@
 #include <avr/io.h> 
+#include <avr/eeprom.h>
 #include <util/delay.h> 
 #include "parser.h"
 #include "funcs.h"
@@ -10,6 +11,7 @@
 // TYPEDEFS
 typedef uint8_t byte;
 #define MAX_SIZE 128
+#define ADDRESS 0
 
 // ------------------
 // MACROS
@@ -249,7 +251,7 @@ char button_map(int button_x, int button_y, int is_mode){
     char button_map[5][5] = {
         { '0', '1', '2', '3', '4'}, // yellow
         { '5', '6', '7', '8', '9'}, // white
-        { '(', ')', 's', 'c', 't'}, // black
+        { '(', 'm', 's', 'c', 't'}, // black
         { '+', '-', '*', '/', '^'}, // blue
         { '=', '.', '_', '<', '&'}, // red
     };
@@ -257,7 +259,7 @@ char button_map(int button_x, int button_y, int is_mode){
     char button_map_mode[5][5] = {
         { '0', '1', '2', '3', '4'}, // yellow
         { '5', '6', '7', '8', '9'}, // white
-        { '(', ')', '@', '#', '$'}, // black
+        { '(', 'M', '@', '#', '$'}, // black
         { '!', 'e', 'p', '%', 'l'}, // blue
         { '=', '.', '_', '<', '&'}, // red
     };
@@ -267,7 +269,6 @@ char button_map(int button_x, int button_y, int is_mode){
 }
 
 int main(void){
-
     // Disable ADC (Convert Analog -> Digital)
     ADCSRA &= ~(1 << ADEN);
 
@@ -316,7 +317,14 @@ int main(void){
                 _delay_ms(50);
                 continue;
             }
-            
+
+            if(mapped_button == 'm'){
+                if(is_answer_loop) eeprom_write_block((const void*) &ans, (void*) ADDRESS, sizeof(double));
+                debounce += 1;
+                _delay_ms(50);
+                continue;
+            }
+
             if(is_answer_loop){
                 if(mapped_button != '<') clear_buf(&pos1, buf1);
                 clear_buf(&pos2, buf2);
@@ -344,15 +352,13 @@ int main(void){
                 is_mode = !is_mode;
             }
             else if(mapped_button == '('){
-                char mutated_button = '(';
-
                 if(pos1 > 0){
-                    char prev
-                    if()
+                    char prev_ch = buf1[pos1 - 1];
+                    if((prev_ch == ')') || (prev_ch >= '0' && prev_ch <= '9')) mapped_button = ')';
                 }
-                buf1[pos1] = mutated_button;
-                pos1 += 1;
 
+                buf1[pos1] = mapped_button;
+                pos1 += 1;
             }
             else {
                 buf1[pos1] = mapped_button;

@@ -2,10 +2,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include "funcs.h"
+#include <avr/eeprom.h>
 
 #define STACK_SIZE 128
 #define PI 3.14159265358979323846
 #define E 2.7182818284
+#define ADDRESS 0
 
 typedef enum {
     ADD,
@@ -157,6 +159,14 @@ double eval(char buf[STACK_SIZE], double ans){
         else if(ch == '$'){
             token.type = FUNC;
             token.val.func = ARCTAN;
+            skip = 1;
+        }
+        else if(ch == 'M'){
+            double mem = 0;
+            eeprom_read_block((void*) &mem, (const void*) ADDRESS, sizeof(double));
+
+            token.type = NUM;
+            token.val.num = mem;
             skip = 1;
         }
         else {
