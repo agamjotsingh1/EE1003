@@ -9,7 +9,7 @@ F_CPU=16000000
 FORMAT = ihex
 TARGET = main
 SRC = $(TARGET).c
-ASRC = parser.c funcs.c
+ASRC = funcs.c parser.c
 OPT = s
 
 # Name of this Makefile (used for "make depend").

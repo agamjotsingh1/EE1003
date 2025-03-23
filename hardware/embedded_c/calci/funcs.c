@@ -1,5 +1,24 @@
+#include <stdint.h>
+
 #define PI 3.14159265358979323846
 #define H 0.01
+
+double fast_inv_sqrt(double x){
+    if(x <= 0) return 0;
+    x = (float) x;
+	long i;
+	float x2, y;
+	const float threehalfs = 1.5F;
+
+	x2 = x * 0.5F;
+	y  = x;
+	i  = * ( long * ) &y;
+	i  = 0x5f3759df - ( i >> 1 );
+	y  = * ( float * ) &i;
+	y  = y * ( threehalfs - ( x2 * y * y ) );
+
+	return (double) y;
+}
 
 double principal_range(double angle) {
     int k = (int)(angle / (2*PI));
@@ -46,9 +65,12 @@ double tan(double x){
 
 // Power function using RK4 for dy/dx = w*y/x
 double pow(double x, double w) {
+    if(x < 0 && ((int) w) != w) return 0;
     if (x == 0) return 0;
     if (w == 0) return 1;
     
+    if(x < 0) return ( ((int) w)%2 == 0 ? 1: -1)*pow(-x, w);
+
     double x0 = 1.0, y = 1.0;
     double target = x;
     int steps = (int)((target - x0) / H);
@@ -68,7 +90,7 @@ double pow(double x, double w) {
 
 // Natural log using RK4 for dy/dx = 1/x
 double ln(double x) {
-    if (x <= 0) return 0;
+    if (x <= 0) return 0.0;
     if (x < 1) return -ln(1/x);
     
     double x0 = 1.0, y = 0.0;
@@ -115,10 +137,10 @@ double arcsin(double x) {
     double step_dir = (x >= 0) ? 1 : -1;
 
     for (int i = 0; i < steps; i++) {
-        double k1 = H / pow(1 - x0*x0, 0.5);
-        double k2 = H / pow(1 - (x0 + step_dir*H/2)*(x0 + step_dir*0.5*k1), 0.5);
-        double k3 = H / pow(1 - (x0 + step_dir*H/2)*(x0 + step_dir*0.5*k2), 0.5);
-        double k4 = H / pow(1 - (x0 + step_dir*H)*(x0 + step_dir*k3), 0.5);
+        double k1 = H * fast_inv_sqrt(1 - x0*x0);
+        double k2 = H * fast_inv_sqrt(1 - (x0 + step_dir*H/2)*(x0 + step_dir*H/2));
+        double k3 = H * fast_inv_sqrt(1 - (x0 + step_dir*H/2)*(x0 + step_dir*H/2));
+        double k4 = H * fast_inv_sqrt(1 - (x0 + step_dir*H)*(x0 + step_dir*H));
 
         y += step_dir * (k1 + 2*k2 + 2*k3 + k4) / 6;
         x0 += step_dir * H;
@@ -129,4 +151,17 @@ double arcsin(double x) {
 
 double arccos(double x){
     return ((PI/2) - arcsin(x));
+}
+
+double factorial(double n) {
+    if(n < 0) return 0;
+    if(n == 0 || n == 1) return 1;
+
+    double result = 1.0;
+    
+    for(double i = 2; i <= (int) n; i++) {
+        result *= i;
+    }
+    
+    return result;
 }

@@ -257,7 +257,7 @@ char button_map(int button_x, int button_y, int is_mode){
         { '0', '1', '2', '3', '4'}, // yellow
         { '5', '6', '7', '8', '9'}, // white
         { '(', ')', '@', '#', '$'}, // black
-        { '+', 'e', 'p', '%', 'l'}, // blue
+        { '!', 'e', 'p', '%', 'l'}, // blue
         { '=', '.', '_', '<', '&'}, // red
     };
 
@@ -310,6 +310,7 @@ int main(void){
                 dtostrf(ans, 16, 5, buf2);
                 pos2 = 16;
                 debounce += 1;
+                display_biline(pos1, buf1, pos2, buf2);
                 _delay_ms(50);
                 continue;
             }
@@ -344,9 +345,10 @@ int main(void){
                 buf1[pos1] = mapped_button;
                 pos1 += 1;
             }
+
+            display_biline(pos1, buf1, pos2, buf2);
         }
 
-        display_biline(pos1, buf1, pos2, buf2);
         debounce += 1;
         _delay_ms(20);
     }

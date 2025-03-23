@@ -12,7 +12,8 @@ typedef enum {
     SUB,
     MUL,
     DIV,
-    POW
+    POW,
+    FACT
 } Op;
 
 typedef enum {
@@ -106,6 +107,11 @@ double eval(char buf[STACK_SIZE], double ans){
         else if(ch == '^'){
             token.type = OP;
             token.val.op = POW;
+            skip = 1;
+        }
+        else if(ch == '!'){
+            token.type = OP;
+            token.val.op = FACT;
             skip = 1;
         }
         else if(ch == 'p'){
@@ -220,6 +226,16 @@ double eval(char buf[STACK_SIZE], double ans){
         }
         else if(token.type == OP){
             Token right = pop(res_stack, &res_size);
+            if(token.val.op == FACT) {
+                Token res_token;
+                res_token.type = NUM;
+                res_token.val.num = factorial(right.val.num);
+                is_ans = 0;
+
+                append(res_stack, &res_size, res_token);
+                continue;
+            }
+
             Token left;
 
             if(res_size == 0 && is_ans){

@@ -6,3 +6,5 @@ double ln(double x);
 double arcsin(double x);
 double arccos(double x);
 double arctan(double x);
+double fast_inv_sqrt(double x);
+double factorial(double x);
