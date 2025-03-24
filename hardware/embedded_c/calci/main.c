@@ -46,8 +46,8 @@ typedef uint8_t byte;
 
 /* UTILITY FUNCTIONS */
 void clear_buf(int* len, char* buf){
-    for(int i = 0; i < *len; i++) buf[i] = '\0';
-    *len = 0;
+    for(int i = 0; i < MAX_SIZE; i++) buf[i] = '\0';
+    if(len != NULL) *len = 0;
 }
 
 void set_buf(int* pos, char* buf, const char* str){
@@ -60,7 +60,25 @@ void set_buf(int* pos, char* buf, const char* str){
 
 int is_func(char repr){
     return (repr == 's' || repr == 'c' || repr == 't' || repr == 'l' ||
-            repr == '@' || repr == '#' || repr == '$');
+            repr == '@' || repr == '#' || repr == '$' || repr == 'L');
+}
+
+void insert_at(char* buf, int index, char ch){
+    char temp = buf[index];
+    for(int i = index; i + 1 < MAX_SIZE && buf[i] != '\0'; i++){
+        char intemp = buf[i + 1];
+        buf[i + 1] = temp;
+        temp = intemp;
+    }
+    buf[index] = ch;
+}
+
+void delete_at(char* buf, int index){
+    int i = index;
+    for(; i + 1 < MAX_SIZE && buf[i] != '\0'; i++){
+        buf[i] = buf[i + 1];
+    }
+    buf[i] == '\0';
 }
 
 /* LCD FUNCTIONS */
@@ -121,11 +139,15 @@ void lcd_int(int data){
     lcd_msg(st); // display in on LCD
 }
 
-void display_biline(int pos1, char* buf1, int pos2, char* buf2){
+void display_biline(int pos1, char* buf1, char* buf2){
     lcd_clear();
+
+    int len1 = 0;
+    while(buf1[len1] != '\0') len1 += 1;
 
     char buf_cpy[MAX_SIZE] = {'\0'};
     int offset = 0;
+    int pos_offset = 0;
 
     if(
         buf1[0] == '+' ||
@@ -137,38 +159,44 @@ void display_biline(int pos1, char* buf1, int pos2, char* buf2){
         buf_cpy[1] = 'n';
         buf_cpy[2] = 's';
         offset = 3;
+        pos_offset = 3;
     }
 
-    for(int i = 0; i < pos1; i++){
+    for(int i = 0; i < len1; i++){
         char ch = buf1[i];
 
         if(ch == 's'){
             buf_cpy[i + offset] = 's';
             buf_cpy[i + offset + 1] = 'i';
             buf_cpy[i + offset + 2] = 'n';
+            if(i < pos1) pos_offset += 2;
             offset += 2;
         }
         else if(ch == 'c'){
             buf_cpy[i + offset] = 'c';
             buf_cpy[i + offset + 1] = 'o';
             buf_cpy[i + offset + 2] = 's';
+            if(i < pos1) pos_offset += 2;
             offset += 2;
         }
         else if(ch == 'c'){
             buf_cpy[i + offset] = 'c';
             buf_cpy[i + offset + 1] = 'o';
             buf_cpy[i + offset + 2] = 's';
+            if(i < pos1) pos_offset += 2;
             offset += 2;
         }
         else if(ch == 't'){
             buf_cpy[i + offset] = 't';
             buf_cpy[i + offset + 1] = 'a';
             buf_cpy[i + offset + 2] = 'n';
+            if(i < pos1) pos_offset += 2;
             offset += 2;
         }
         else if(ch == 'l'){
             buf_cpy[i + offset] = 'l';
             buf_cpy[i + offset + 1] = 'n';
+            if(i < pos1) pos_offset += 1;
             offset += 1;
         }
         else if(ch == '@'){
@@ -176,11 +204,15 @@ void display_biline(int pos1, char* buf1, int pos2, char* buf2){
             buf_cpy[i + offset + 1] = 's';
             buf_cpy[i + offset + 2] = 'i';
             buf_cpy[i + offset + 3] = 'n';
+            if(i < pos1) pos_offset += 3;
             offset += 3;
         }
         else if(ch == '#'){
-            buf_cpy[i + offset] = 'a'; buf_cpy[i + offset + 1] = 'c'; buf_cpy[i + offset + 2] = 'o';
+            buf_cpy[i + offset] = 'a';
+            buf_cpy[i + offset + 1] = 'c';
+            buf_cpy[i + offset + 2] = 'o';
             buf_cpy[i + offset + 3] = 's';
+            if(i < pos1) pos_offset += 3;
             offset += 3;
         }
         else if(ch == '$'){
@@ -188,7 +220,15 @@ void display_biline(int pos1, char* buf1, int pos2, char* buf2){
             buf_cpy[i + offset + 1] = 't';
             buf_cpy[i + offset + 2] = 'a';
             buf_cpy[i + offset + 3] = 'n';
+            if(i < pos1) pos_offset += 3;
             offset += 3;
+        }
+        else if(ch == 'L'){
+            buf_cpy[i + offset] = 'l';
+            buf_cpy[i + offset + 1] = 'o';
+            buf_cpy[i + offset + 2] = 'g';
+            if(i < pos1) pos_offset += 2;
+            offset += 2;
         }
         else if(ch == 'p'){
             buf_cpy[i + offset] = (char) (247);
@@ -198,19 +238,17 @@ void display_biline(int pos1, char* buf1, int pos2, char* buf2){
         }
     }
 
-    pos1 += offset;
+    len1 += offset;
 
     lcd_cmd(0x80);
-    if(pos1 > 16) lcd_msg(buf_cpy + pos1 - 15);
+    if(len1 > 16) lcd_msg(buf_cpy + len1 - 15);
     else lcd_msg(buf_cpy);
 
     lcd_cmd(0xC0);
-    if(pos2 > 16) lcd_msg(buf2 + pos2 - 15);
-    else lcd_msg(buf2);
+    lcd_msg(buf2);
 
     lcd_cmd(0x80);
-
-    for(int i = 0; i < (pos1 > 16 ? 15: pos1); i++) lcd_cmd(0x14);
+    for(int i = 0; i < (pos1 + pos_offset > 16 ? 15: pos1 + pos_offset); i++) lcd_cmd(0x14);
 }
 
 /* BUTTON FUNCTIONS */
@@ -249,7 +287,7 @@ char button_map(int button_x, int button_y, int is_mode){
     char button_map[5][5] = {
         { '0', '1', '2', '3', '4'}, // yellow
         { '5', '6', '7', '8', '9'}, // white
-        { '(', 'f', 's', 'c', 't'}, // black
+        { '(', 's', 'c', 't', 'L'}, // black
         { '+', '-', '*', '/', '^'}, // blue
         { '=', '.', '_', '<', '&'}, // red
     };
@@ -257,8 +295,8 @@ char button_map(int button_x, int button_y, int is_mode){
     char button_map_mode[5][5] = {
         { '0', '1', '2', '3', '4'}, // yellow
         { '5', '6', '7', '8', '9'}, // white
-        { 'm', 'M', '@', '#', '$'}, // black
-        { '!', 'e', 'p', '%', 'l'}, // blue
+        { 'm', '@', '#', '$', 'l'}, // black
+        { '!', 'e', 'p', 'M', '0'}, // blue
         { '=', '.', '_', '<', '&'}, // red
     };
 
@@ -277,7 +315,7 @@ int main(void){
     DDRB = 0xFF; // 1111.1111; set PB0-PB7 as outputs	 
 
     // use PortD for Buttons
-    DDRD = 0xFF; // 0000.0000; set PD0-PD7 as inputs
+    DDRD = 0b01111111;
     PORTD = 0xFF;
 
     lcd_init(); // initialize LCD controller
@@ -289,9 +327,7 @@ int main(void){
 
     char buf1[MAX_SIZE] = {'\0'};
     int pos1 = 0;
-
     char buf2[MAX_SIZE] = {'\0'};
-    int pos2 = 0;
 
     double ans = 0;
     int is_mode = 0;
@@ -308,18 +344,23 @@ int main(void){
                 is_answer_loop = 1;
                 lcd_clear();
 
+                while(buf1[pos1] != '\0') pos1 += 1;
+
                 for(int i = 0; i < braks; i++){
                     buf1[pos1] = ')';
                     pos1 += 1;
                 }
 
                 ans = eval(buf1, ans);
+                /*
                 if(ans > 1e15) sprintf(buf2, "%16.*e", ans);
-                else dtostrf(ans, 16, 5, buf2);
+                else dtostrf(ans, 16, 5, buf2);*/
 
-                pos2 = 16;
+                //sprintf(buf2, "%15.*e", ans);
+                dtostrf(ans, 16, 5, buf2);
+
                 debounce += 1;
-                display_biline(pos1, buf1, pos2, buf2);
+                display_biline(pos1, buf1, buf2);
                 _delay_ms(50);
                 continue;
             }
@@ -330,48 +371,33 @@ int main(void){
                 _delay_ms(50);
                 continue;
             }
-            else if(mapped_button == 'f'){
-                if(is_answer_loop){
-                    int numerator;
-                    int denominator;
-                    dtf(ans, &numerator, &denominator);
-
-                    char temp[16];
-                    sprintf(buf2, "%d/%d", (int) numerator, (int) denominator);
-                    //clear_buf(&pos2, buf2);
-
-                    //sprintf(buf2, "%16s", temp);
-                    //pos2 = 16;
-                    display_biline(pos1, buf1, pos2, buf2);
-                }
-
-                debounce += 1;
-                _delay_ms(50);
-                continue;
-            }
 
             if(is_answer_loop){
                 if(mapped_button != '<' && mapped_button != '(') clear_buf(&pos1, buf1);
-                clear_buf(&pos2, buf2);
+                clear_buf(NULL, buf2);
                 is_answer_loop = 0;
                 braks = 0;
             }
 
             if(mapped_button == '<'){
                 if(pos1 >= 2 && buf1[pos1 - 1] == '(' && is_func(buf1[pos1 - 2])) { 
-                    buf1[pos1 - 2] = '\0';
-                    pos1 = pos1 - 1;
+                    delete_at(buf1, pos1 - 2);
+                    pos1 -= 1;
                 }
-                buf1[pos1 - 1] = '\0';
-                pos1 = pos1 - 1;
+
+                if(buf1[pos1 - 1] == '(') braks -= 1;
+                else if(buf1[pos1 - 1] == ')') braks += 1;
+
+                delete_at(buf1, pos1 - 1);
+                pos1 -= 1;
             }
             else if(mapped_button == '_'){
                 clear_buf(&pos1, buf1);
-                clear_buf(&pos2, buf2);
+                clear_buf(NULL, buf2);
             }
             else if(is_func(mapped_button)){
-                buf1[pos1] = mapped_button;
-                buf1[pos1 + 1] = '(';
+                insert_at(buf1, pos1, mapped_button);
+                insert_at(buf1, pos1 + 1, '(');
                 braks++;
                 pos1 += 2;
             }
@@ -387,15 +413,27 @@ int main(void){
                 if(mapped_button == ')') braks -= 1;
                 else braks += 1;
 
-                buf1[pos1] = mapped_button;
+                insert_at(buf1, pos1, mapped_button);
                 pos1 += 1;
             }
             else {
-                buf1[pos1] = mapped_button;
+                insert_at(buf1, pos1, mapped_button);
                 pos1 += 1;
             }
 
-            display_biline(pos1, buf1, pos2, buf2);
+            display_biline(pos1, buf1, buf2);
+        }
+        else if(!(PIND & (1 << (7))) && debounce > BUTTON_THRESHOLD && buf1[pos1 + 1] != '\0'){
+            if(is_func(buf1[pos1])) pos1 += 2;
+            else pos1 += 1;
+            debounce = 0;
+            display_biline(pos1, buf1, buf2);
+        }
+        else if(!(PINC & (1 << (5))) && debounce > BUTTON_THRESHOLD && pos1 != 0){
+            if(pos1 > 1 && is_func(buf1[pos1 - 2])) pos1 -= 2;
+            else pos1 -= 1;
+            debounce = 0;
+            display_biline(pos1, buf1, buf2);
         }
 
         debounce += 1;

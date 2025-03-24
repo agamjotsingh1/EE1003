@@ -25,7 +25,8 @@ typedef enum {
     LN,
     ARCSIN,
     ARCCOS,
-    ARCTAN
+    ARCTAN,
+    LOG
 } Func;
 
 typedef enum {
@@ -144,6 +145,11 @@ double eval(char buf[STACK_SIZE], double ans){
         else if(ch == 'l'){
             token.type = FUNC;
             token.val.func = LN;
+            skip = 1;
+        }
+        else if(ch == 'L'){
+            token.type = FUNC;
+            token.val.func = LOG;
             skip = 1;
         }
         else if(ch == '@'){
@@ -280,6 +286,7 @@ double eval(char buf[STACK_SIZE], double ans){
             else if(token.val.func == COS) res_token.val.num = cos(res_token.val.num);
             else if(token.val.func == TAN) res_token.val.num = tan(res_token.val.num);
             else if(token.val.func == LN) res_token.val.num = ln(res_token.val.num);
+            else if(token.val.func == LOG) res_token.val.num = ln(res_token.val.num)/2.30258509299; // denom is ln(10)
             else if(token.val.func == ARCSIN) res_token.val.num = arcsin(res_token.val.num);
             else if(token.val.func == ARCCOS) res_token.val.num = arccos(res_token.val.num);
             else if(token.val.func == ARCTAN) res_token.val.num = arctan(res_token.val.num);
